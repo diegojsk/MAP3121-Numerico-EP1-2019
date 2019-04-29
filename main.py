@@ -26,9 +26,16 @@ def s (a,b):
 def RotGivens(W,n,m,i,j,c,s):
 
     for r in range (1,n) :
-        
-        aux = c(W[i][r],W[j][r])*W[i][r] - s(W[i][r],W[j][r])*W[j][r]
-        W[j][r] = s(W[i][r],W[j][r])*W[i][r] + c(W[i][r],W[j][r])*W[j][r]
+
+        aux = c*W[i][r] - s*W[j][r]
+        W[j][r] = s*W[i][r] + c*W[j][r]
         W[i][r] = aux
 
-    return W
+def FatoracaoQR (W,n,m,i,j):
+
+    for k in range(1,m):
+        for j in range(n,-1,k+1):
+            i = j -1
+            if W[j][k] != 0 :
+                RotGivens(W,n,m,i,j,c(W[i][k],W[j][k]),s(W[i][k],W[j][k]))
+
