@@ -16,7 +16,7 @@ def calc_c (a,b):
         cos = 1/sqrt(1+(T^2))
     else :
         T = -a/b
-        cos = s(a,b) *T
+        cos = calc_s(a,b)*T
     return cos
 
 def calc_s (a,b):
@@ -27,13 +27,13 @@ def calc_s (a,b):
     """
     if a>b:
         T = -b/a
-        sen = c(a,b)*T
+        sen = calc_c(a,b)*T
     else :
         T = -a/b
         sen = 1/sqrt(1+(T^2))
     return sen
 
-def RotGivens(W,i,j,c,s):
+def rot_givens(W,n,m,i,j,c,s):
     """
     Implementa Rotação de Givens para matriz W
         :param W: ndarray
@@ -51,17 +51,29 @@ def RotGivens(W,i,j,c,s):
         W[j][r] = s*W[i][r] + c*W[j][r]
         W[i][r] = aux
 
-def FatoracaoQR (W,i,j):
+def zera_elemento(W,i,j,k):
+    """
+    Realiza uma rotação de Givens de modo a zerar o elemento (j,k)
+        :param W: ndarray
+        :param i: linha a ser rotacionada
+        :param j: linha a ser zerada
+        :param k: coluna a ser zerada
+    """
+    n, m = W.shape
+    _s = calc_s(W[i,k], W[j,k])
+    _c = calc_c(W[i,k], W[j,k])
+    return rot_givens(W, n, m, i, j, _c, _s)
+
+def fatorar_qr (W,i,j):
     """
     docstring here
         :param W: ndarray
         :param i: 
         :param j: 
     """
-
     n, m = W.shape
     for k in range(m):
         for j in range(n-1,-1,k):
+            i = j-1
             if W[j][k] != 0 :
-                RotGivens(W,i,j,c(W[i][k],W[j][k]),s(W[i][k],W[j][k]))
-
+                zera_elemento(W,i,j,k)
