@@ -4,7 +4,7 @@ from cmath import sqrt
 
 #define parâmetros c e s 
 
-def c (a,b):
+def calc_c (a,b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado 
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
@@ -19,7 +19,7 @@ def c (a,b):
         cos = s(a,b) *T
     return cos
 
-def s (a,b):
+def calc_s (a,b):
     """
     Calcula o parâmetro s, definido na página 3 do enunciado 
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
