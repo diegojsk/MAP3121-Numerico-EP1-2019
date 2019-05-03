@@ -42,9 +42,11 @@ def RotGivens(W,i,j,c,s):
         :param c: 
         :param s: 
     """
+    col = 0
+    while (W[i][col] == 0 and W[j][col] == 0):
+        col += 1
 
-    n, m = W.shape
-    for r in range (1,n) :
+    for r in range(col, n):
         aux = c*W[i][r] - s*W[j][r]
         W[j][r] = s*W[i][r] + c*W[j][r]
         W[i][r] = aux
@@ -58,9 +60,8 @@ def FatoracaoQR (W,i,j):
     """
 
     n, m = W.shape
-    for k in range(1,m):
-        for j in range(n,-1,k+1):
-            i = j -1
+    for k in range(m):
+        for j in range(n-1,-1,k):
             if W[j][k] != 0 :
                 RotGivens(W,i,j,c(W[i][k],W[j][k]),s(W[i][k],W[j][k]))
 
