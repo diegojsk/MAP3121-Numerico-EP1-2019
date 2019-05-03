@@ -1,18 +1,30 @@
+import numpy as np
 import math
 from cmath import sqrt
 
 #define parâmetros c e s 
 
 def c (a,b):
+    """
+    Calcula o parâmetro c, definido na página 3 do enunciado 
+        :param a: w[i,j] - elemento da matriz W na posição (i, j)
+        :param b: w[j,i] - elemento da matriz W na posição (j, i)
+    """
+    
     if a>b:
         T = -b/a
-        coss = 1/sqrt(1+(T^2))
+        cos = 1/sqrt(1+(T^2))
     else :
         T = -a/b
-        coss = s(a,b) *T
-    return coss
+        cos = s(a,b) *T
+    return cos
 
 def s (a,b):
+    """
+    Calcula o parâmetro s, definido na página 3 do enunciado 
+        :param a: w[i,j] - elemento da matriz W na posição (i, j)
+        :param b: w[j,i] - elemento da matriz W na posição (j, i)
+    """
     if a>b:
         T = -b/a
         sen = c(a,b)*T
@@ -21,21 +33,34 @@ def s (a,b):
         sen = 1/sqrt(1+(T^2))
     return sen
 
-#implementa Rotação de Givens para matriz W
+def RotGivens(W,i,j,c,s):
+    """
+    Implementa Rotação de Givens para matriz W
+        :param W: ndarray
+        :param i: linha a ser zerada
+        :param j: coluna a ser zerada
+        :param c: 
+        :param s: 
+    """
 
-def RotGivens(W,n,m,i,j,c,s):
-
+    n, m = W.shape
     for r in range (1,n) :
-
         aux = c*W[i][r] - s*W[j][r]
         W[j][r] = s*W[i][r] + c*W[j][r]
         W[i][r] = aux
 
-def FatoracaoQR (W,n,m,i,j):
+def FatoracaoQR (W,i,j):
+    """
+    docstring here
+        :param W: ndarray
+        :param i: 
+        :param j: 
+    """
 
+    n, m = W.shape
     for k in range(1,m):
         for j in range(n,-1,k+1):
             i = j -1
             if W[j][k] != 0 :
-                RotGivens(W,n,m,i,j,c(W[i][k],W[j][k]),s(W[i][k],W[j][k]))
+                RotGivens(W,i,j,c(W[i][k],W[j][k]),s(W[i][k],W[j][k]))
 
