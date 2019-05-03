@@ -7,8 +7,8 @@ from cmath import sqrt
 def c (a,b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado 
-        :param a: w[i,j] - elemento da matriz W na posição (i, j)
-        :param b: w[j,i] - elemento da matriz W na posição (j, i)
+        :param a: w[i,k] - elemento da matriz W na posição (i, k)
+        :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
     
     if a>b:
@@ -22,8 +22,8 @@ def c (a,b):
 def s (a,b):
     """
     Calcula o parâmetro s, definido na página 3 do enunciado 
-        :param a: w[i,j] - elemento da matriz W na posição (i, j)
-        :param b: w[j,i] - elemento da matriz W na posição (j, i)
+        :param a: w[i,k] - elemento da matriz W na posição (i, k)
+        :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
     if a>b:
         T = -b/a
@@ -37,8 +37,8 @@ def RotGivens(W,i,j,c,s):
     """
     Implementa Rotação de Givens para matriz W
         :param W: ndarray
-        :param i: linha a ser zerada
-        :param j: coluna a ser zerada
+        :param i: linha a ser rotacionada
+        :param j: linha a ser zerada
         :param c: 
         :param s: 
     """
