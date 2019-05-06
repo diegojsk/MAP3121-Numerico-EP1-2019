@@ -76,3 +76,17 @@ def fatorar_qr (W,i,j):
             i = j-1
             if W[j][k] != 0 :
                 zera_elemento(W,i,j,k)
+
+
+if __name__ == "__main__":
+
+    W = np.array([[ 2,  1,  1, -1,  1],
+                  [ 0,  3,  0,  1,  2],
+                  [ 0,  0,  2,  2, -1],
+                  [ 0,  0, -1,  1,  2],
+                  [ 0,  0,  0,  3,  1.0]])
+
+    zera_elemento(W, 2, 3, 2)
+
+    print(W*np.sqrt(5))
+    print(W)
