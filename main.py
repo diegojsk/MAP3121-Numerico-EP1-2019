@@ -12,7 +12,7 @@ def calc_c (a,b):
     """
     if abs(a) > abs(b):
         T = -b/a
-        cos = 1/sqrt(1+(T**2))
+        cos = 1/np.sqrt(1+(T**2))
     else :
         T = -a/b
         cos = calc_s(a,b)*T
@@ -29,7 +29,7 @@ def calc_s (a,b):
         sen = calc_c(a,b)*T
     else :
         T = -a/b
-        sen = 1/sqrt(1+(T**2))
+        sen = 1/np.sqrt(1+(T**2))
     return sen
 
 def rot_givens(W,n,m,i,j,c,s):
