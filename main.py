@@ -10,8 +10,7 @@ def calc_c (a,b):
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
-    
-    if a>b:
+    if abs(a) > abs(b):
         T = -b/a
         cos = 1/sqrt(1+(T**2))
     else :
@@ -25,7 +24,7 @@ def calc_s (a,b):
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
-    if a>b:
+    if abs(a) > abs(b):
         T = -b/a
         sen = calc_c(a,b)*T
     else :
