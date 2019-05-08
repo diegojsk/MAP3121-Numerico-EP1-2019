@@ -90,3 +90,5 @@ if __name__ == "__main__":
 
     print(W*np.sqrt(5))
     print(W)
+
+    
