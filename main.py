@@ -63,22 +63,24 @@ def zera_elemento(W,i,j,k):
     _c = calc_c(W[i,k], W[j,k])
     return rot_givens(W, n, m, i, j, _c, _s)
 
-def fatorar_qr (W,i,j):
+def fatorar_qr (W):
     """
     docstring here
         :param W: ndarray
-        :param i: 
-        :param j: 
     """
     n, m = W.shape
     for k in range(m):
-        for j in range(n-1,-1,k):
+        for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
                 zera_elemento(W,i,j,k)
 
 
 if __name__ == "__main__":
+
+    '''
+    Matriz W do enunciado
+    '''
 
     W = np.array([[ 2,  1,  1, -1,  1],
                   [ 0,  3,  0,  1,  2],
@@ -90,5 +92,50 @@ if __name__ == "__main__":
 
     print(W*np.sqrt(5))
     print(W)
+
+    """
+    item a) 
+    """
+    
+    n = 64
+    m=64
+    a = np.array(m*[n*[0]])
+    for i in range(n):
+        for j in range(m):
+            if i == j:
+                a[i][j] = 2
+            elif abs(i-j) == 1:
+                a[i][j] = 1
+            elif abs(i-j) > 1:
+                a[i][j] = 0
+            else:
+                a[i][j] = 0
+    print(a)
+    fatorar_qr(a)
+    print(a)
+
+    """
+    item b)
+    """
+    """
+    n = 20
+    m = 17
+    b = np.array(17*[20*[0]])
+    for i in range(n):
+        for j in range(m):
+            if abs(i-j) <= 4:
+                b[i][j] = 1/(i+j-1)
+            elif abs(i-j) > 4:
+                b[i][j]  =0
+            else:
+                b[i][j] = 0
+    print(b)
+    fatorar_qr(b)
+    print(b)
+    """        
+
+    
+
+    
 
     
