@@ -2,8 +2,6 @@ import numpy as np
 import math
 from cmath import sqrt
 
-#define parâmetros c e s 
-
 def calc_c (a,b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado 
@@ -45,7 +43,7 @@ def rot_givens(W,n,m,i,j,c,s):
     while (W[i][col] == 0 and W[j][col] == 0):
         col += 1
 
-    for r in range(col, n):
+    for r in range(col,m):
         aux = c*W[i][r] - s*W[j][r]
         W[j][r] = s*W[i][r] + c*W[j][r]
         W[i][r] = aux
@@ -92,50 +90,67 @@ if __name__ == "__main__":
 
     print(W*np.sqrt(5))
     print(W)
-
+    
+    '''
+    Matriz b qualquer
+    '''
+    
+    b = np.array([[1],[1],[1],[1],[1]])
+    print(b)
+    zera_elemento(b,2,3,0)
+    print(b)
+    
+    
     """
     item a) 
     """
     
     n = 64
     m=64
-    a = np.array(m*[n*[0]])
+    A = np.array(n*[m*[0]])
     for i in range(n):
         for j in range(m):
             if i == j:
-                a[i][j] = 2
+                A[i][j] = 2
             elif abs(i-j) == 1:
-                a[i][j] = 1
+                A[i][j] = 1
             elif abs(i-j) > 1:
-                a[i][j] = 0
+                A[i][j] = 0
             else:
-                a[i][j] = 0
-    print(a)
-    fatorar_qr(a)
-    print(a)
+                A[i][j] = 0
+    print(A)
+    b = np.array(n*[[1]])
+    print(b)
+    
+    fatorar_qr(A)
+    fatorar_qr(b)
+    print(A)
+    print(b)
 
     """
     item b)
     """
-    """
+    
     n = 20
     m = 17
-    b = np.array(17*[20*[0]])
+    B = np.array(n*[m*[0]])
+    print(B)
     for i in range(n):
         for j in range(m):
             if abs(i-j) <= 4:
-                b[i][j] = 1/(i+j-1)
+                B[i][j] = 1/((i+1+j+1-1))
             elif abs(i-j) > 4:
-                b[i][j]  =0
+                B[i][j] = 0
             else:
-                b[i][j] = 0
+                B[i][j] = 0
+    print(B)
+    b = np.array(n*[[0]])
+    for i in range(n):
+        b[i] = i + 1
     print(b)
+    
+    fatorar_qr(B)
     fatorar_qr(b)
+    print(B)
     print(b)
-    """        
-
-    
-
-    
-
     
