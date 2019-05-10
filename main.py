@@ -2,7 +2,7 @@ import numpy as np
 import math
 from cmath import sqrt
 
-ERR = 1e-5
+ERR = 1e-4
 
 def calc_c (a,b):
     """
@@ -77,9 +77,10 @@ def fatorar_qr (W):
                zera_elemento(W,W,i,j,k)
 
 
-def resolver_sist(W,A):
+def resolver_sist(W, A):
     """
-    Resolve sistema simultâneos para W e A
+    Dadas matrizes W e A, encontra a matriz H, tal que
+        W*H = A
         :param W: ndarray n;p
         :param A: ndarray n;m
     """
@@ -94,7 +95,8 @@ def resolver_sist(W,A):
     H = np.zeros((p, m))
 
     for k in range(p):
-        for j in range(n-1,k,-1):
+        intervalo = range(k, n)
+        for j in intervalo[::-1]:
             i = j-1
             if W[j][k] != 0 :
                 # n, m = W.shape
@@ -103,8 +105,9 @@ def resolver_sist(W,A):
                 rot_givens(W,n,p,i,j,_c,_s)
                 rot_givens(A,n,m,i,j,_c,_s)
 
-    for k in range(p-1, 0,-1):
-        soma = 0
+    intervalo = [i for i in range(p)]
+    for k in intervalo[::-1]:
+        soma = np.array(1).astype(np.double)
         for i in range(k,p-1):
             soma = soma + W[k][i]*H[i][j]
         for j in range(m):
@@ -132,13 +135,14 @@ def residuo(A,W,H):
         p = ph
 
     WH = np.dot(W,H)
-    erro = 0.0
-    for i in range(n):
-        for j in range(m):
-            if (A[i][j] - WH[i][j]) > ERR:
-                erro = erro + (A[i][j] - WH[i][j])**2
+    # erro = 0.0
+    # for i in range(n):
+    #     for j in range(m):
+    #         if (A[i][j] - WH[i][j]) > ERR:
+    #             erro = erro + (A[i][j] - WH[i][j])**2
 
-    # err = A - 
+    err = A - WH
+    erro = np.sum(np.dot(err, err))
     return erro
 
     
@@ -160,35 +164,49 @@ def calc_transpose(M):
         :param M: 
     """
     n, m = M.shape
-    M_t = np.array(m, n)
+    M_t = np.empty((m, n))
     for i in range(n):
         for j in range(m):
             M_t[j][i] = M[i][j]
     return M_t
 
-def resolve_mmq(A, H, err):
+def resolve_mmq(A, W, H, err):
 
     n, m = A.shape
     p, n = H.shape
 
     _A = A.copy()
-    W = np.empty((n, p))
+    # W = np.random.rand(n, p)
+    # W = np.ones((n, p))
 
-    while residuo(A, W, H) < err:
+    print()
+
+    while residuo(A, W, H) > err:
 
         H = resolver_sist(W, A)
-        H[ H < 0 ] = 0
+        # H[ H < 0 ] = 0
+
+        print("H:")
+        print(H)
 
         A = _A.copy()
-        A_t = calc_transpose(A)
-        H_t = calc_transpose(H)
+        # A_t = calc_transpose(A)
+        # H_t = calc_transpose(H)
+
+        A_t = A.transpose()
+        H_t = H.transpose()
 
         W_t = resolver_sist(H_t, A_t)
+        
+        print("W_t:")
+        print(W_t)
 
-        W = calc_transpose(W_t)
+        # W = calc_transpose(W_t)
+        W = W_t.transpose()
+
         W[ W < 0 ] = 0
 
-    return W
+    return H
 
 if __name__ == "__main__":
 
@@ -196,145 +214,145 @@ if __name__ == "__main__":
     Matriz W do enunciado
     '''
 
-    W = np.array([[ 2,  1,  1, -1,  1],
-                  [ 0,  3,  0,  1,  2],
-                  [ 0,  0,  2,  2, -1],
-                  [ 0,  0, -1,  1,  2],
-                  [ 0,  0,  0,  3,  1.0]])
+    # W = np.array([[ 2,  1,  1, -1,  1],
+    #               [ 0,  3,  0,  1,  2],
+    #               [ 0,  0,  2,  2, -1],
+    #               [ 0,  0, -1,  1,  2],
+    #               [ 0,  0,  0,  3,  1.0]])
 
-    zera_elemento(W,W, 2, 3, 2)
-    print(W*np.sqrt(5))
-    print(W)
+    # zera_elemento(W,W, 2, 3, 2)
+    # print(W*np.sqrt(5))
+    # print(W)
     
-    '''
-    Matriz b qualquer
-    '''
+    # '''
+    # Matriz b qualquer
+    # '''
     
-    b = np.array([[1],[1],[1],[1],[1]]).astype(np.double)
-    print(b)
-    zera_elemento(b,W,2,3,0)
-    print(b)
+    # b = np.array([[1],[1],[1],[1],[1]]).astype(np.double)
+    # print(b)
+    # zera_elemento(b,W,2,3,0)
+    # print(b)
     
-    """
-    Primeira Tarefa
-    """
+    # """
+    # Primeira Tarefa
+    # """
     
-    """
-    item a) 
-    """
+    # """
+    # item a) 
+    # """
     
-    n = 64
-    m = 64
-    A = np.zeros((n,m))
-    for i in range(n):
-        for j in range(m):
-            if i == j:
-                A[i][j] = 2
-            elif abs(i-j) == 1:
-                A[i][j] = 1
-            elif abs(i-j) > 1:
-                A[i][j] = 0
-            else:
-                A[i][j] = 0
-    print(A)
-    b = np.ones((n,1))
-    print(b)
+    # n = 64
+    # m = 64
+    # A = np.zeros((n,m))
+    # for i in range(n):
+    #     for j in range(m):
+    #         if i == j:
+    #             A[i][j] = 2
+    #         elif abs(i-j) == 1:
+    #             A[i][j] = 1
+    #         elif abs(i-j) > 1:
+    #             A[i][j] = 0
+    #         else:
+    #             A[i][j] = 0
+    # print(A)
+    # b = np.ones((n,1))
+    # print(b)
     
-    fatorar_qr(A)
-    fatorar_qr(b)
-    print(A)
-    print(b)
+    # fatorar_qr(A)
+    # fatorar_qr(b)
+    # print(A)
+    # print(b)
 
-    """
-    item b)
-    """
+    # """
+    # item b)
+    # """
     
-    n = 20
-    m = 17
-    B = np.zeros((n,m))
-    print(B)
-    for i in range(n):
-        for j in range(m):
-            if abs(i-j) <= 4:
-                B[i][j] = 1/((i+1+j+1-1))
-            elif abs(i-j) > 4:
-                B[i][j] = 0
-            else:
-                B[i][j] = 0
-    print(B)
-    b = np.zeros((n,1))
-    for i in range(n):
-        b[i] = i + 1
-    print(b)
+    # n = 20
+    # m = 17
+    # B = np.zeros((n,m))
+    # print(B)
+    # for i in range(n):
+    #     for j in range(m):
+    #         if abs(i-j) <= 4:
+    #             B[i][j] = 1/((i+1+j+1-1))
+    #         elif abs(i-j) > 4:
+    #             B[i][j] = 0
+    #         else:
+    #             B[i][j] = 0
+    # print(B)
+    # b = np.zeros((n,1))
+    # for i in range(n):
+    #     b[i] = i + 1
+    # print(b)
     
-    fatorar_qr(B)
-    fatorar_qr(b)
-    print(B)
-    print(b)
-
-
-    '''
-    item c)
-    '''
+    # fatorar_qr(B)
+    # fatorar_qr(b)
+    # print(B)
+    # print(b)
 
 
-    n = 64 
-    p = 64
-    W = np.zeros((n,p))
-    for i in range(n):
-        for j in range(p):
-            if i == j:
-                W[i][j] = 2
-            elif abs(i-j) == 1:
-                W[i][j] = 1
-            elif abs(i-j) > 1:
-                W[i][j] = 0
-            else:
-                W[i][j] = 0
-    m=3
-    A = np.zeros((n,m))
-    for i in range(n):
-        for j in range(m):
-            if j == 1-1 :
-                A[i][j] = 1
-            elif j == 2-1:
-                A[i][j] = i + 1
-            elif j == 3-1:
-                A[i][j] = 2*(i+1) - 1
+    # '''
+    # item c)
+    # '''
+
+
+    # n = 64 
+    # p = 64
+    # W = np.zeros((n,p))
+    # for i in range(n):
+    #     for j in range(p):
+    #         if i == j:
+    #             W[i][j] = 2
+    #         elif abs(i-j) == 1:
+    #             W[i][j] = 1
+    #         elif abs(i-j) > 1:
+    #             W[i][j] = 0
+    #         else:
+    #             W[i][j] = 0
+    # m=3
+    # A = np.zeros((n,m))
+    # for i in range(n):
+    #     for j in range(m):
+    #         if j == 1-1 :
+    #             A[i][j] = 1
+    #         elif j == 2-1:
+    #             A[i][j] = i + 1
+    #         elif j == 3-1:
+    #             A[i][j] = 2*(i+1) - 1
     
-    H = resolver_sist(W,A)
-    print(H)
+    # H = resolver_sist(W,A)
+    # print(H)
 
-    """
-    item d)
-    """
+    # """
+    # item d)
+    # """
 
-    n = 20
-    p = 17
-    W = np.zeros((n,m))
-    print(B)
-    for i in range(n):
-        for j in range(m):
-            if abs(i-j) <= 4:
-                W[i][j] = 1/((i+1+j+1-1))
-            elif abs(i-j) > 4:
-                W[i][j] = 0
-            else:
-                W[i][j] = 0
+    # n = 20
+    # p = 17
+    # W = np.zeros((n,m))
+    # print(B)
+    # for i in range(n):
+    #     for j in range(m):
+    #         if abs(i-j) <= 4:
+    #             W[i][j] = 1/((i+1+j+1-1))
+    #         elif abs(i-j) > 4:
+    #             W[i][j] = 0
+    #         else:
+    #             W[i][j] = 0
 
-    m=3
-    A = np.zeros((n,m))
-    for i in range(n):
-        for j in range(m):
-            if j == 1-1 :
-                A[i][j] = 1
-            elif j == 2-1:
-                A[i][j] = i + 1
-            elif j == 3-1:
-                A[i][j] = 2*(i+1) - 1
+    # m=3
+    # A = np.zeros((n,m))
+    # for i in range(n):
+    #     for j in range(m):
+    #         if j == 1-1 :
+    #             A[i][j] = 1
+    #         elif j == 2-1:
+    #             A[i][j] = i + 1
+    #         elif j == 3-1:
+    #             A[i][j] = 2*(i+1) - 1
     
-    H = resolver_sist(W,A)
-    print(H)
+    # H = resolver_sist(W,A)
+    # print(H)
 
     """
     Segunda Tarefa
@@ -351,7 +369,7 @@ if __name__ == "__main__":
     H = np.array([[1/2,1,0],
                   [1/2,0,1]])
     
-    print(resolve_mmq(A, H, 0.0001))
+    print(resolve_mmq(A, W, H, 1e-5))
 
     
 
