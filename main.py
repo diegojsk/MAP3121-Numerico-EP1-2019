@@ -132,7 +132,7 @@ if __name__ == "__main__":
     
     n = 64
     m=64
-    A = np.array(n*[m*[0]])
+    A = np.zeros((n,m))
     for i in range(n):
         for j in range(m):
             if i == j:
@@ -144,7 +144,7 @@ if __name__ == "__main__":
             else:
                 A[i][j] = 0
     print(A)
-    b = np.array(n*[[1]])
+    b = np.ones((n,1))
     print(b)
     
     fatorar_qr(A)
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     
     n = 20
     m = 17
-    B = np.array(n*[m*[0]])
+    B = np.zeros((n,m))
     print(B)
     for i in range(n):
         for j in range(m):
@@ -169,7 +169,7 @@ if __name__ == "__main__":
             else:
                 B[i][j] = 0
     print(B)
-    b = np.array(n*[[0]])
+    b = np.zeros((n,1))
     for i in range(n):
         b[i] = i + 1
     print(b)
@@ -187,7 +187,7 @@ if __name__ == "__main__":
 
     n = 64 
     p=64
-    W = np.array(n*[p*[0]])
+    W = np.zeros((n,p))
     for i in range(n):
         for j in range(p):
             if i == j:
@@ -199,6 +199,7 @@ if __name__ == "__main__":
             else:
                 W[i][j] = 0
     m=3
+    A = np.zeros((n,m))
     for i in range(n):
         for j in range(m):
             if j == 1-1 :
@@ -217,7 +218,7 @@ if __name__ == "__main__":
 
     n = 20
     p = 17
-    W = np.array(n*[m*[0]])
+    W = np.zeros((n,m))
     print(B)
     for i in range(n):
         for j in range(m):
@@ -229,6 +230,7 @@ if __name__ == "__main__":
                 W[i][j] = 0
 
     m=3
+    A = np.zeros((n,m))
     for i in range(n):
         for j in range(m):
             if j == 1-1 :
