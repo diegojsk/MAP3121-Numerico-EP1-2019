@@ -2,6 +2,8 @@ import numpy as np
 import math
 from cmath import sqrt
 
+ERR = 1e-5
+
 def calc_c (a,b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado 
@@ -111,31 +113,33 @@ def resolver_sist(W,A):
     return H
 
     
-    def residuo(A,W,H):
-        """
-        Calculo residuo para (A-WH)
-            :param W: ndarray n;m
-            :param A: ndarray n;p
-            :param W: ndarray p;m
-        """
-        na,ma = A.shape
-        nw,pw = W.shape
-        ph,mh = H.shape
+def residuo(A,W,H):
+    """
+    Calculo residuo para (A-WH)
+        :param W: ndarray n;m
+        :param A: ndarray n;p
+        :param W: ndarray p;m
+    """
+    na,ma = A.shape
+    nw,pw = W.shape
+    ph,mh = H.shape
 
-        if na != nw or ma != mh or ph != pw :
-            raise ValueError("Matrizes não compatíveis")
-        else:
-            n = na
-            m = mh
-            p = ph
+    if na != nw or ma != mh or ph != pw :
+        raise ValueError("Matrizes não compatíveis")
+    else:
+        n = na
+        m = mh
+        p = ph
 
-        WH = W*H
-        erro = 0
-        for i in range(n):
-            for j in range(m):
+    WH = np.dot(W,H)
+    erro = 0.0
+    for i in range(n):
+        for j in range(m):
+            if (A[i][j] - WH[i][j]) > ERR:
                 erro = erro + (A[i][j] - WH[i][j])**2
 
-        return erro
+    # err = A - 
+    return erro
 
     
 def normaliza(M):
@@ -157,14 +161,15 @@ def calc_transpose(M):
     """
     n, m = M.shape
     M_t = np.array(m, n)
-        for i in range(n):
-            for j in range(m):
-                M_t[j][i] = M[i][j]
+    for i in range(n):
+        for j in range(m):
+            M_t[j][i] = M[i][j]
     return M_t
 
-def resolve_mmq(A, H, p, err):
+def resolve_mmq(A, H, err):
 
     n, m = A.shape
+    p, n = H.shape
 
     _A = A.copy()
     W = np.empty((n, p))
@@ -343,10 +348,10 @@ if __name__ == "__main__":
                   [0,1],
                   [4/5,0]])
 
-    H = W = np.array([[1/2,1,0],
-                      [1/2,0,1]])
+    H = np.array([[1/2,1,0],
+                  [1/2,0,1]])
     
-    
+    print(resolve_mmq(A, H, 0.0001))
 
     
 
