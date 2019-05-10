@@ -79,9 +79,13 @@ def resolver_sist(W,A):
     """
     Resolve sistema simultâneos para W e A
     """
-    n,p = W.shape
-    n,m = A.shape
-    H = np.array([p*[m*[0]]])
+    n1, p = W.shape
+    n2, m = A.shape
+    n = None
+    if n1 != n2:
+        raise ValueError("Matrizes de tamanhos incompatíveis!")
+    else:
+        n = n1
 
     for k in range(1,p):
         for j in range(n-1,k,-1):
