@@ -78,6 +78,8 @@ def fatorar_qr (W):
 def resolver_sist(W,A):
     """
     Resolve sistema simultâneos para W e A
+        :param W: ndarray n;p
+        :param A: ndarray n;m
     """
     n1, p = W.shape
     n2, m = A.shape
@@ -112,6 +114,9 @@ def resolver_sist(W,A):
     def residuo(A,W,H):
         """
         Calculo residuo para (A-WH)
+            :param W: ndarray n;m
+            :param A: ndarray n;p
+            :param W: ndarray p;m
         """
         na,ma = A.shape
         nw,pw = W.shape
