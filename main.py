@@ -159,6 +159,9 @@ if __name__ == "__main__":
     zera_elemento(b,W,2,3,0)
     print(b)
     
+    """
+    Primeira Tarefa
+    """
     
     """
     item a) 
@@ -276,6 +279,23 @@ if __name__ == "__main__":
     
     H = resolver_sist(W,A)
     print(H)
+
+    """
+    Segunda Tarefa
+    """
+
+    A = np.array([[3/10,3/5,0],
+                  [1/2,0,1],
+                  [4/10,4/5,0]])
+    
+    W = np.array([[3/5,0],
+                  [0,1],
+                  [4/5,0]])
+
+    H = W = np.array([[1/2,1,0],
+                      [1/2,0,1]])
+    
+    
 
     
 
