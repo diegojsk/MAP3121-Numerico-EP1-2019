@@ -107,6 +107,31 @@ def resolver_sist(W,A):
             H[k][j] = (A[k][j] - soma)/W[k][k]
 
     return H
+
+    
+    def residuo(A,W,H):
+        """
+        Calculo residuo para (A-WH)
+        """
+        na,ma = A.shape
+        nw,pw = W.shape
+        ph,mh = H.shape
+
+        if na != nw or ma != mh or ph != pw :
+            raise ValueError("Matrizes não compatíveis")
+        else:
+            n = na
+            m = mh
+            p = ph
+
+        WH = W*H
+        erro = 0
+        for i in range(n):
+            for j in range(m):
+                erro = erro + (A[i][j] - WH[i][j])**2
+
+        return erro
+
     
 if __name__ == "__main__":
 
