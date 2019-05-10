@@ -87,18 +87,20 @@ def resolver_sist(W,A):
     else:
         n = n1
 
-    for k in range(1,p):
+    H = np.zeros((p, m))
+
+    for k in range(p):
         for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
                 zera_elemento(W,W,i,j,k)
                 zera_elemento(A,W,i,j,k)  
 
-    for k in range(p,1,-1):
+    for k in range(p-1, 0,-1):
         soma = 0
         for i in range(k,p-1):
             soma = soma + W[k][i]*H[i][j]
-        for j in range(1,m):
+        for j in range(m):
             H[j][k] = (A[k][j] - soma)/W[k][k]
 
     return H
