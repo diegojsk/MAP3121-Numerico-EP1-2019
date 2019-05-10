@@ -78,6 +78,8 @@ def fatorar_qr (W):
 def resolver_sist(W,A):
     """
     Resolve sistema simultâneos para W e A
+        :param W: ndarray n;p
+        :param A: ndarray n;m
     """
     n1, p = W.shape
     n2, m = A.shape
@@ -107,6 +109,34 @@ def resolver_sist(W,A):
             H[k][j] = (A[k][j] - soma)/W[k][k]
 
     return H
+
+    
+    def residuo(A,W,H):
+        """
+        Calculo residuo para (A-WH)
+            :param W: ndarray n;m
+            :param A: ndarray n;p
+            :param W: ndarray p;m
+        """
+        na,ma = A.shape
+        nw,pw = W.shape
+        ph,mh = H.shape
+
+        if na != nw or ma != mh or ph != pw :
+            raise ValueError("Matrizes não compatíveis")
+        else:
+            n = na
+            m = mh
+            p = ph
+
+        WH = W*H
+        erro = 0
+        for i in range(n):
+            for j in range(m):
+                erro = erro + (A[i][j] - WH[i][j])**2
+
+        return erro
+
     
 def normaliza(M):
     """
@@ -180,6 +210,9 @@ if __name__ == "__main__":
     zera_elemento(b,W,2,3,0)
     print(b)
     
+    """
+    Primeira Tarefa
+    """
     
     """
     item a) 
@@ -297,6 +330,23 @@ if __name__ == "__main__":
     
     H = resolver_sist(W,A)
     print(H)
+
+    """
+    Segunda Tarefa
+    """
+
+    A = np.array([[3/10,3/5,0],
+                  [1/2,0,1],
+                  [4/10,4/5,0]])
+    
+    W = np.array([[3/5,0],
+                  [0,1],
+                  [4/5,0]])
+
+    H = W = np.array([[1/2,1,0],
+                      [1/2,0,1]])
+    
+    
 
     
 
