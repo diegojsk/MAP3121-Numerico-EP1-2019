@@ -120,7 +120,7 @@ if __name__ == "__main__":
     Matriz b qualquer
     '''
     
-    b = np.array([[1],[1],[1],[1],[1]])
+    b = np.array([[1],[1],[1],[1],[1]]).astype(np.double)
     print(b)
     zera_elemento(b,W,2,3,0)
     print(b)
