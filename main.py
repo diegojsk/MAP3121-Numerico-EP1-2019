@@ -9,10 +9,10 @@ def calc_c (a,b):
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
     if abs(a) > abs(b):
-        T = -b/a
+        T = -np.divide(b,a)
         cos = 1/np.sqrt(1+(T**2))
     else :
-        T = -a/b
+        T = -np.divide(a,b)
         cos = calc_s(a,b)*T
     return cos
 
@@ -23,10 +23,10 @@ def calc_s (a,b):
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
     if abs(a) > abs(b):
-        T = -b/a
+        T = -np.divide(b,a)
         sen = calc_c(a,b)*T
     else :
-        T = -a/b
+        T = -np.divide(a,b) 
         sen = 1/np.sqrt(1+(T**2))
     return sen
 
