@@ -71,9 +71,33 @@ def fatorar_qr (W):
         for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
+               zera_elemento(W,i,j,k)
+
+
+def resolver_sist(W,A):
+    """
+    Resolve sistema simultâneos para W e A
+    """
+    n,p = W.shape
+    n,m = A.shape
+    H = np.array([p*[m*[0]]])
+
+    for k in range(1,p):
+        for j in range(n-1,k,-1):
+            i = j-1
+            if W[j][k] != 0 :
                 zera_elemento(W,i,j,k)
+                zera_elemento(A,i,j,k)
 
+    for k in range(p,1,-1):
+        soma = 0
+        for i in range(k+1,p):
+            soma = soma + W[k][i]*H[i][j]
+        for j in range(1,m):
+            H[j][k] = (A[k][j] - soma)/W[k][k]
 
+    return H
+    
 if __name__ == "__main__":
 
     '''
@@ -153,4 +177,70 @@ if __name__ == "__main__":
     fatorar_qr(b)
     print(B)
     print(b)
+
+
+    '''
+    item c)
+    '''
+
+
+    n = 64 
+    p=64
+    W = np.array(n*[p*[0]])
+    for i in range(n):
+        for j in range(p):
+            if i == j:
+                W[i][j] = 2
+            elif abs(i-j) == 1:
+                W[i][j] = 1
+            elif abs(i-j) > 1:
+                W[i][j] = 0
+            else:
+                W[i][j] = 0
+    m=3
+    for i in range(n):
+        for j in range(m):
+            if j == 1-1 :
+                A[i][j] = 1
+            elif j == 2-1:
+                A[i][j] = i + 1
+            elif j == 3-1:
+                A[i][j] = 2*(i+1) - 1
+    
+    H = resolver_sist(W,A)
+    print(H)
+
+    """
+    item d)
+    """
+
+    n = 20
+    p = 17
+    W = np.array(n*[m*[0]])
+    print(B)
+    for i in range(n):
+        for j in range(m):
+            if abs(i-j) <= 4:
+                W[i][j] = 1/((i+1+j+1-1))
+            elif abs(i-j) > 4:
+                W[i][j] = 0
+            else:
+                W[i][j] = 0
+
+    m=3
+    for i in range(n):
+        for j in range(m):
+            if j == 1-1 :
+                A[i][j] = 1
+            elif j == 2-1:
+                A[i][j] = i + 1
+            elif j == 3-1:
+                A[i][j] = 2*(i+1) - 1
+    
+    H = resolver_sist(W,A)
+    print(H)
+
+    
+
+
     
