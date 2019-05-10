@@ -108,6 +108,53 @@ def resolver_sist(W,A):
 
     return H
     
+def normaliza(M):
+    """
+    Normaliza a matriz M
+        :param M: 
+    """
+    soma_colunas = np.sum(M, axis=0)
+    print(soma_colunas)
+    n, m = M.shape
+    for i in range(n):
+        for j in range(m):
+            M[i][j] = np.divide(M[i][j], soma_colunas[j])
+
+def calc_transpose(M):
+    """
+    Calcula a transposta da matriz M
+        :param M: 
+    """
+    n, m = M.shape
+    M_t = np.array(m, n)
+        for i in range(n):
+            for j in range(m):
+                M_t[j][i] = M[i][j]
+    return M_t
+
+def resolve_mmq(A, H, p, err):
+
+    n, m = A.shape
+
+    _A = A.copy()
+    W = np.empty((n, p))
+
+    while residuo(A, W, H) < err:
+
+        H = resolver_sist(W, A)
+        H[ H < 0 ] = 0
+
+        A = _A.copy()
+        A_t = calc_transpose(A)
+        H_t = calc_transpose(H)
+
+        W_t = resolver_sist(H_t, A_t)
+
+        W = calc_transpose(W_t)
+        W[ W < 0 ] = 0
+
+    return W
+
 if __name__ == "__main__":
 
     '''
@@ -121,7 +168,6 @@ if __name__ == "__main__":
                   [ 0,  0,  0,  3,  1.0]])
 
     zera_elemento(W,W, 2, 3, 2)
-
     print(W*np.sqrt(5))
     print(W)
     
@@ -140,7 +186,7 @@ if __name__ == "__main__":
     """
     
     n = 64
-    m=64
+    m = 64
     A = np.zeros((n,m))
     for i in range(n):
         for j in range(m):
@@ -195,7 +241,7 @@ if __name__ == "__main__":
 
 
     n = 64 
-    p=64
+    p = 64
     W = np.zeros((n,p))
     for i in range(n):
         for j in range(p):
