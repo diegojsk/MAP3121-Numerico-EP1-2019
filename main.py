@@ -93,15 +93,18 @@ def resolver_sist(W,A):
         for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
-                zera_elemento(W,W,i,j,k)
-                zera_elemento(A,W,i,j,k)  
+                # n, m = W.shape
+                _s = calc_s(W[i,k], W[j,k])
+                _c = calc_c(W[i,k], W[j,k])
+                rot_givens(W,n,p,i,j,_c,_s)
+                rot_givens(A,n,m,i,j,_c,_s)
 
     for k in range(p-1, 0,-1):
         soma = 0
         for i in range(k,p-1):
             soma = soma + W[k][i]*H[i][j]
         for j in range(m):
-            H[j][k] = (A[k][j] - soma)/W[k][k]
+            H[k][j] = (A[k][j] - soma)/W[k][k]
 
     return H
     
