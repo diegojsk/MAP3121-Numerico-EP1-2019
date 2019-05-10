@@ -48,17 +48,18 @@ def rot_givens(W,n,m,i,j,c,s):
         W[j][r] = s*W[i][r] + c*W[j][r]
         W[i][r] = aux
 
-def zera_elemento(W,i,j,k):
+def zera_elemento(W,Wc,i,j,k):
     """
     Realiza uma rotação de Givens de modo a zerar o elemento (j,k)
         :param W: ndarray
+        :param Wc: array que define seno e cosseno
         :param i: linha a ser rotacionada
         :param j: linha a ser zerada
         :param k: coluna a ser zerada
     """
     n, m = W.shape
-    _s = calc_s(W[i,k], W[j,k])
-    _c = calc_c(W[i,k], W[j,k])
+    _s = calc_s(Wc[i,k], Wc[j,k])
+    _c = calc_c(Wc[i,k], Wc[j,k])
     return rot_givens(W, n, m, i, j, _c, _s)
 
 def fatorar_qr (W):
@@ -71,7 +72,7 @@ def fatorar_qr (W):
         for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
-               zera_elemento(W,i,j,k)
+               zera_elemento(W,W,i,j,k)
 
 
 def resolver_sist(W,A):
@@ -86,12 +87,12 @@ def resolver_sist(W,A):
         for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
-                zera_elemento(W,i,j,k)
-                zera_elemento(A,i,j,k)
+                zera_elemento(W,W,i,j,k)
+                zera_elemento(A,W,i,j,k)  
 
     for k in range(p,1,-1):
         soma = 0
-        for i in range(k+1,p):
+        for i in range(k,p-1):
             soma = soma + W[k][i]*H[i][j]
         for j in range(1,m):
             H[j][k] = (A[k][j] - soma)/W[k][k]
@@ -110,7 +111,7 @@ if __name__ == "__main__":
                   [ 0,  0, -1,  1,  2],
                   [ 0,  0,  0,  3,  1.0]])
 
-    zera_elemento(W, 2, 3, 2)
+    zera_elemento(W,W, 2, 3, 2)
 
     print(W*np.sqrt(5))
     print(W)
@@ -121,7 +122,7 @@ if __name__ == "__main__":
     
     b = np.array([[1],[1],[1],[1],[1]])
     print(b)
-    zera_elemento(b,2,3,0)
+    zera_elemento(b,W,2,3,0)
     print(b)
     
     
