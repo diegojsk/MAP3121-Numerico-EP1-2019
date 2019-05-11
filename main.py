@@ -76,51 +76,13 @@ def fatorar_qr (W):
             i = j-1
             if W[j][k] != 0 :
                #zera_elemento(W,W,i,j,k)
-               _s = calc_s(W[i,k], W[j,k])
-               _c = calc_c(W[i,k], W[j,k])
-               rot_givens(W,n,p,i,j,_c,_s)
+               _s = calc_s(W[i][k], W[j][k])
+               _c = calc_c(W[i][k], W[j][k])
+               rot_givens(W,n,m,i,j,_c,_s)
                
-def resolver_sist(W, b):
-    """
-    Dadas matrizes W e A, encontra a matriz H, tal que
-         W*H = A
-    Função Principal da Primeira Tarefa a) b)
-        :param W: ndarray n;p
-        :param A: ndarray n;1
-    """
-    n1, p = W.shape
-    n2, m = A.shape
-    n = None
 
-    if n1 != n2 or m != 1:
-        raise ValueError("Matrizes de tamanhos incompatíveis!")
-    else:
-        n = n1
 
-    H = np.zeros((p, m))
-
-    for k in range(p):
-        intervalo = range(k, n)
-        for j in intervalo[::-1]:
-            i = j-1
-            if W[j][k] != 0 :
-                # n, m = W.shape
-                _s = calc_s(W[i,k], W[j,k])
-                _c = calc_c(W[i,k], W[j,k])
-                rot_givens(W,n,p,i,j,_c,_s)
-                rot_givens(b,n,m,i,j,_c,_s)
-
-    intervalo = [i for i in range(p)]
-    for k in intervalo[::-1]:
-        soma = np.array(1).astype(np.double)
-        for i in range(k,p-1):
-            soma = soma + W[k][i]*H[i][j]
-        for j in range(m):
-            H[k][j] = (A[k][j] - soma)/W[k][k]
-
-    return H
-
-def resolver_sist_sim(W, A):
+def resolver_sist(W, A):
     """
     Dadas matrizes W e A, encontra a matriz H, tal que
          W*H = A
@@ -268,15 +230,28 @@ if __name__ == "__main__":
     Matriz W do enunciado
     '''
 
-    # W = np.array([[ 2,  1,  1, -1,  1],
-    #               [ 0,  3,  0,  1,  2],
-    #               [ 0,  0,  2,  2, -1],
-    #               [ 0,  0, -1,  1,  2],
-    #               [ 0,  0,  0,  3,  1.0]])
+    W = np.array([[ 2,  1,  1, -1,  1],
+                   [ 0,  3,  0,  1,  2],
+                   [ 0,  0,  2,  2, -1],
+                   [ 0,  0, -1,  1,  2],
+                   [ 0,  0,  0,  3,  1.0]])
 
-    # zera_elemento(W,W, 2, 3, 2)
-    # print(W*np.sqrt(5))
-    # print(W)
+    zera_elemento(W,W, 2, 3, 2)
+    print(W*np.sqrt(5))
+    print(W)
+
+    '''
+    Verificar se é triangular
+    '''
+    
+    fatorar_qr(W)
+    print(W)
+    for i in range(5):
+        for j in range(5):
+            if i > j :
+                print(W[i][j])
+    #print(W)
+    
     
     '''
     Matriz b qualquer
@@ -295,6 +270,7 @@ if __name__ == "__main__":
     item a) 
     """
     
+    '''
     n = 64
     m = 64
     A = np.zeros((n,m))
@@ -308,19 +284,31 @@ if __name__ == "__main__":
                  A[i][j] = 0
             else:
                  A[i][j] = 0 
-
-    b = np.ones((n,1))
+                 
+    print(A)
+    fatorar_qr(A)
     
-    resolver_sist(A,b)
+    
+    for i in range(n):
+        for j in range(m):
+            if i > j :
+                print(A[i][j] , i, j)
+    
+    
+    b = np.ones((n,1))
+    print(b)
+    
+    print(resolver_sist(A,b))
+    '''
 
     """
     item b)
     """
-    
+
+    '''
     n = 20
     m = 17
     B = np.zeros((n,m))
-    print(B)
     for i in range(n):
         for j in range(m):
             if abs(i-j) <= 4:
@@ -330,96 +318,112 @@ if __name__ == "__main__":
             else:
                 B[i][j] = 0
 
-    print(B)
+    #print(B)
+    fatorar_qr(B)
+    for i in range(n):
+        for j in range(j):
+            if i > j :
+                print(B[i][j],i,j)
+    
     b = np.zeros((n,1))
     for i in range(n):
         b[i] = i + 1
-    print(b)
+    #print(b)
 
-    print(resolver_sist(B,b))
-    
+    #print(resolver_sist(B,b))
+    '''
 
 
     '''
     item c)
     '''
 
+    '''
+    n = 64 
+    p = 64
+    W = np.zeros((n,p))
+    for i in range(n):
+        for j in range(p):
+            if i == j:
+                W[i][j] = 2
+            elif abs(i-j) == 1:
+                W[i][j] = 1
+            elif abs(i-j) > 1:
+                W[i][j] = 0
+            else:
+                W[i][j] = 0
+    m=3
+    A = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            if j == 1-1 :
+                A[i][j] = 1
+            elif j == 2-1:
+                A[i][j] = i + 1
+            elif j == 3-1:
+                A[i][j] = 2*(i+1) - 1
 
-    # n = 64 
-    # p = 64
-    # W = np.zeros((n,p))
-    # for i in range(n):
-    #     for j in range(p):
-    #         if i == j:
-    #             W[i][j] = 2
-    #         elif abs(i-j) == 1:
-    #             W[i][j] = 1
-    #         elif abs(i-j) > 1:
-    #             W[i][j] = 0
-    #         else:
-    #             W[i][j] = 0
-    # m=3
-    # A = np.zeros((n,m))
-    # for i in range(n):
-    #     for j in range(m):
-    #         if j == 1-1 :
-    #             A[i][j] = 1
-    #         elif j == 2-1:
-    #             A[i][j] = i + 1
-    #         elif j == 3-1:
-    #             A[i][j] = 2*(i+1) - 1
-    
-    # H = resolver_sist_sim(W,A)
-    # print(H)
+    #print(W)
+    #fatorar_qr(W)
+    #print(W)
+    #print(A)
+    #H = resolver_sist(W,A)
+    #print(H)
+    '''
+
 
     """
     item d)
     """
 
-    # n = 20
-    # p = 17
-    # W = np.zeros((n,m))
-    # print(B)
-    # for i in range(n):
-    #     for j in range(m):
-    #         if abs(i-j) <= 4:
-    #             W[i][j] = 1/((i+1+j+1-1))
-    #         elif abs(i-j) > 4:
-    #             W[i][j] = 0
-    #         else:
-    #             W[i][j] = 0
+    '''
+    n = 20
+    p = 17
+    W = np.zeros((n,m))
+    #print(W)
+    for i in range(n):
+        for j in range(m):
+            if abs(i-j) <= 4:
+                W[i][j] = 1/((i+1+j+1-1))
+            elif abs(i-j) > 4:
+                W[i][j] = 0
+            else:
+                W[i][j] = 0
 
-    # m=3
-    # A = np.zeros((n,m))
-    # for i in range(n):
-    #     for j in range(m):
-    #         if j == 1-1 :
-    #             A[i][j] = 1
-    #         elif j == 2-1:
-    #             A[i][j] = i + 1
-    #         elif j == 3-1:
-    #             A[i][j] = 2*(i+1) - 1
+    m=3
+    A = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            if j == 1-1 :
+                A[i][j] = 1
+            elif j == 2-1:
+                A[i][j] = i + 1
+            elif j == 3-1:
+                A[i][j] = 2*(i+1) - 1
     
-    # H = resolver_sist_sim(W,A)
-    # print(H)
+    H = resolver_sist(W,A)
+    #print(H)
+    '''
+    
 
     """
     Segunda Tarefa
     """
 
-    #A = np.array([[3/10,3/5,0],
-    #              [1/2,0,1],
-    #              [4/10,4/5,0]])
     
-    #W = np.array([[3/5,0],
-    #              [0,1],
-    #              [4/5,0]])
+    A = np.array([[3/10,3/5,0],
+                  [1/2,0,1],
+                  [4/10,4/5,0]])
+    
+    W = np.array([[3/5,0],
+                  [0,1],
+                  [4/5,0]])
 
-    #H = np.array([[1/2,1,0],
-    #              [1/2,0,1]])
-    #
-    #print(resolve_mmq(A, W, H, 1e-5))
-
+    H = np.array([[1/2,1,0],
+                  [1/2,0,1]])
+    
+    print(resolve_mmq(A, W, H, 1e-5))
+    
     
 
 
