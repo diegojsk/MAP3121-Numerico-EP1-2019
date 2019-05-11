@@ -66,27 +66,72 @@ def zera_elemento(W,Wc,i,j,k):
 
 def fatorar_qr (W):
     """
-    docstring here
+    Aplica a fatoração QR para matriz W
         :param W: ndarray
     """
     n, m = W.shape
+
     for k in range(m):
         for j in range(n-1,k,-1):
             i = j-1
             if W[j][k] != 0 :
-               zera_elemento(W,W,i,j,k)
-
-
-def resolver_sist(W, A):
+               #zera_elemento(W,W,i,j,k)
+               _s = calc_s(W[i,k], W[j,k])
+               _c = calc_c(W[i,k], W[j,k])
+               rot_givens(W,n,p,i,j,_c,_s)
+               
+def resolver_sist(W, b):
     """
     Dadas matrizes W e A, encontra a matriz H, tal que
-        W*H = A
+         W*H = A
+    Função Principal da Primeira Tarefa a) b)
+        :param W: ndarray n;p
+        :param A: ndarray n;1
+    """
+    n1, p = W.shape
+    n2, m = A.shape
+    n = None
+
+    if n1 != n2 or m != 1:
+        raise ValueError("Matrizes de tamanhos incompatíveis!")
+    else:
+        n = n1
+
+    H = np.zeros((p, m))
+
+    for k in range(p):
+        intervalo = range(k, n)
+        for j in intervalo[::-1]:
+            i = j-1
+            if W[j][k] != 0 :
+                # n, m = W.shape
+                _s = calc_s(W[i,k], W[j,k])
+                _c = calc_c(W[i,k], W[j,k])
+                rot_givens(W,n,p,i,j,_c,_s)
+                rot_givens(b,n,m,i,j,_c,_s)
+
+    intervalo = [i for i in range(p)]
+    for k in intervalo[::-1]:
+        soma = np.array(1).astype(np.double)
+        for i in range(k,p-1):
+            soma = soma + W[k][i]*H[i][j]
+        for j in range(m):
+            H[k][j] = (A[k][j] - soma)/W[k][k]
+
+    return H
+
+def resolver_sist_sim(W, A):
+    """
+    Dadas matrizes W e A, encontra a matriz H, tal que
+         W*H = A
+    Função Principal da Primeira Tarefa c) d)
         :param W: ndarray n;p
         :param A: ndarray n;m
     """
     n1, p = W.shape
     n2, m = A.shape
     n = None
+
     if n1 != n2:
         raise ValueError("Matrizes de tamanhos incompatíveis!")
     else:
@@ -172,6 +217,15 @@ def calc_transpose(M):
 
 def resolve_mmq(A, W, H, err):
 
+    """
+    Resolve o  MMQ 
+    Função Principal da Segunda Tarefa
+        :param A:
+        :param W:
+        :param H:
+        :param err:
+    """
+
     n, m = A.shape
     p, n = H.shape
 
@@ -224,76 +278,71 @@ if __name__ == "__main__":
     # print(W*np.sqrt(5))
     # print(W)
     
-    # '''
-    # Matriz b qualquer
-    # '''
+    '''
+    Matriz b qualquer
+    '''
     
     # b = np.array([[1],[1],[1],[1],[1]]).astype(np.double)
     # print(b)
     # zera_elemento(b,W,2,3,0)
     # print(b)
     
-    # """
-    # Primeira Tarefa
-    # """
+    """
+    Primeira Tarefa
+    """
     
-    # """
-    # item a) 
-    # """
+    """
+    item a) 
+    """
     
-    # n = 64
-    # m = 64
-    # A = np.zeros((n,m))
-    # for i in range(n):
-    #     for j in range(m):
-    #         if i == j:
-    #             A[i][j] = 2
-    #         elif abs(i-j) == 1:
-    #             A[i][j] = 1
-    #         elif abs(i-j) > 1:
-    #             A[i][j] = 0
-    #         else:
-    #             A[i][j] = 0
-    # print(A)
-    # b = np.ones((n,1))
-    # print(b)
-    
-    # fatorar_qr(A)
-    # fatorar_qr(b)
-    # print(A)
-    # print(b)
+    n = 64
+    m = 64
+    A = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            if i == j:
+                 A[i][j] = 2
+            elif abs(i-j) == 1:
+                 A[i][j] = 1
+            elif abs(i-j) > 1:
+                 A[i][j] = 0
+            else:
+                 A[i][j] = 0 
 
-    # """
-    # item b)
-    # """
+    b = np.ones((n,1))
     
-    # n = 20
-    # m = 17
-    # B = np.zeros((n,m))
-    # print(B)
-    # for i in range(n):
-    #     for j in range(m):
-    #         if abs(i-j) <= 4:
-    #             B[i][j] = 1/((i+1+j+1-1))
-    #         elif abs(i-j) > 4:
-    #             B[i][j] = 0
-    #         else:
-    #             B[i][j] = 0
-    # print(B)
-    # b = np.zeros((n,1))
-    # for i in range(n):
-    #     b[i] = i + 1
-    # print(b)
+    resolver_sist(A,b)
+
+    """
+    item b)
+    """
     
-    # fatorar_qr(B)
-    # fatorar_qr(b)
-    # print(B)
-    # print(b)
+    n = 20
+    m = 17
+    B = np.zeros((n,m))
+    print(B)
+    for i in range(n):
+        for j in range(m):
+            if abs(i-j) <= 4:
+                B[i][j] = 1/((i+1+j+1-1))
+            elif abs(i-j) > 4:
+                B[i][j] = 0
+            else:
+                B[i][j] = 0
+
+    print(B)
+    b = np.zeros((n,1))
+    for i in range(n):
+        b[i] = i + 1
+    print(b)
+
+    print(resolver_sist(B,b))
+    
 
 
-    # '''
-    # item c)
-    # '''
+    '''
+    item c)
+    '''
 
 
     # n = 64 
@@ -320,12 +369,12 @@ if __name__ == "__main__":
     #         elif j == 3-1:
     #             A[i][j] = 2*(i+1) - 1
     
-    # H = resolver_sist(W,A)
+    # H = resolver_sist_sim(W,A)
     # print(H)
 
-    # """
-    # item d)
-    # """
+    """
+    item d)
+    """
 
     # n = 20
     # p = 17
@@ -351,25 +400,25 @@ if __name__ == "__main__":
     #         elif j == 3-1:
     #             A[i][j] = 2*(i+1) - 1
     
-    # H = resolver_sist(W,A)
+    # H = resolver_sist_sim(W,A)
     # print(H)
 
     """
     Segunda Tarefa
     """
 
-    A = np.array([[3/10,3/5,0],
-                  [1/2,0,1],
-                  [4/10,4/5,0]])
+    #A = np.array([[3/10,3/5,0],
+    #              [1/2,0,1],
+    #              [4/10,4/5,0]])
     
-    W = np.array([[3/5,0],
-                  [0,1],
-                  [4/5,0]])
+    #W = np.array([[3/5,0],
+    #              [0,1],
+    #              [4/5,0]])
 
-    H = np.array([[1/2,1,0],
-                  [1/2,0,1]])
-    
-    print(resolve_mmq(A, W, H, 1e-5))
+    #H = np.array([[1/2,1,0],
+    #              [1/2,0,1]])
+    #
+    #print(resolve_mmq(A, W, H, 1e-5))
 
     
 
