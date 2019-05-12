@@ -232,13 +232,9 @@ def resolve_mmq(A, W, H, err):
 
     print()
 
-
     while residuo(A, W, H) > err:
 
-        normaliza(W)
-        _W = W.copy()
-
-        H = resolver_sist(_W, A)
+        H = resolver_sist(W, A)
         # H[ H < 0 ] = 0
 
         print("H:")
@@ -251,15 +247,15 @@ def resolve_mmq(A, W, H, err):
         A_t = A.transpose()
         H_t = H.transpose()
 
-        _W_t = resolver_sist(H_t, A_t)
+        W_t = resolver_sist(H_t, A_t)
         
         print("W_t:")
         print(W_t)
 
         # W = calc_transpose(W_t)
-        _W = W_t.transpose()
+        W = W_t.transpose()
 
-        _W[ _W < 0 ] = 0
+        W[ W < 0 ] = 0
 
     return H
 
