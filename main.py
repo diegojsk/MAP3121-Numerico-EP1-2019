@@ -139,7 +139,6 @@ def resolver_sist(W, A):
     for k in range(p):
         j = n-1
         while j >= k+1:
-            print(W)
             i = j-1
             if W[j][k] != 0 :
                 # n, m = W.shape
@@ -196,7 +195,6 @@ def normaliza(M):
         :param M: 
     """
     soma_colunas = np.sum(M, axis=0)
-    print(soma_colunas)
     n, m = M.shape
     for i in range(n):
         for j in range(m):
@@ -285,8 +283,7 @@ if __name__ == "__main__":
         for j in range(5):
             if i > j :
                 print(W[i][j])
-    #print(W)
-    
+  
     
     '''
     Matriz b qualquer
@@ -296,9 +293,4 @@ if __name__ == "__main__":
     # print(b)
     # zera_elemento(b,W,2,3,0)
     # print(b)
-    
-
-    
-
-
     
