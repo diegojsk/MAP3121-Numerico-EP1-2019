@@ -214,7 +214,7 @@ def calc_transpose(M):
             M_t[j][i] = M[i][j]
     return M_t
 
-def resolve_mmq(A, W, H, err):
+def resolve_mmq(A, W0, err):
 
     """
     Resolve o  MMQ 
@@ -225,41 +225,38 @@ def resolve_mmq(A, W, H, err):
         :param err:
     """
 
-    n, m = A.shape
-    p, n = H.shape
+    n1, p = W0.shape
+    n2, m = A.shape
 
+    n = None
+    if n1 != n2:
+        raise ValueError("Matrizes com tamanhos não compatíveis!")
+    else:
+        n = n1
+
+    H = np.ones((p, m))
+    W = W0.copy()
     _A = A.copy()
     # W = np.random.rand(n, p)
     # W = np.ones((n, p))
 
-    print()
-
     while residuo(A, W, H) > err:
 
         H = resolver_sist(W, A)
-        # H[ H < 0 ] = 0
-
-        print("H:")
-        print(H)
+        H[ H < 0 ] = 0
 
         A = _A.copy()
-        # A_t = calc_transpose(A)
-        # H_t = calc_transpose(H)
 
         A_t = A.transpose()
         H_t = H.transpose()
 
         W_t = resolver_sist(H_t, A_t)
         
-        print("W_t:")
-        print(W_t)
-
-        # W = calc_transpose(W_t)
         W = W_t.transpose()
 
         W[ W < 0 ] = 0
 
-    return H
+    return (W, H)
 
 if __name__ == "__main__":
 
