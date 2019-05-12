@@ -4,12 +4,24 @@ from cmath import sqrt
 
 ERR = 1e-4
 
+SUPPORTED_FORMATS = [np.float32, np.float64, np.float_, np.complex64, np.complex128, np.complex_]
+
 def calc_c (a,b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado 
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
+    if a.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(a.dtype))
+
+    if b.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(b.dtype))
+
     if abs(a) > abs(b):
         T = -np.divide(b,a)
         cos = 1/np.sqrt(1+(T**2))
@@ -24,6 +36,16 @@ def calc_s (a,b):
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
     """
+    if a.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(a.dtype))
+
+    if b.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(b.dtype))
+        
     if abs(a) > abs(b):
         T = -np.divide(b,a)
         sen = calc_c(a,b)*T
@@ -41,6 +63,10 @@ def rot_givens(W,n,m,i,j,c,s):
         :param c: 
         :param s: 
     """
+    if W.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(W.dtype))
     col = 0
     while (W[i][col] == 0 and W[j][col] == 0):
         col += 1
@@ -59,6 +85,10 @@ def zera_elemento(W,Wc,i,j,k):
         :param j: linha a ser zerada
         :param k: coluna a ser zerada
     """
+    if W.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(W.dtype))
     n, m = W.shape
     _s = calc_s(Wc[i,k], Wc[j,k])
     _c = calc_c(Wc[i,k], Wc[j,k])
@@ -69,6 +99,11 @@ def fatorar_qr (W):
     Aplica a fatoração QR para matriz W
         :param W: ndarray
     """
+    if W.dtype not in SUPPORTED_FORMATS:
+        raise TypeError("Matriz de formato não suportado: {}! \
+            \nNote que variáveis inteiras acarretam em perdas severas por arredondamento."
+            .format(W.dtype))
+
     n, m = W.shape
 
     for k in range(m):
