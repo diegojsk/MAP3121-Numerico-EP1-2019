@@ -200,7 +200,8 @@ def resolve_mmq(A, W, H, err):
 
     while residuo(A, W, H) > err:
 
-        _W = normaliza(W).copy
+        normaliza(W)
+        _W = W.copy()
 
         H = resolver_sist(_W, A)
         # H[ H < 0 ] = 0
