@@ -7,6 +7,7 @@ MAX_ITER = 1e2
 SUPPORTED_FORMATS = [np.float32, np.float64, np.float_,
                      np.complex64, np.complex128, np.complex_]
 
+
 def calc_c(a, b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado
@@ -302,14 +303,14 @@ def resolve_mmq(A, W0):
         prev_err = err
         err = residuo(A, W, H)
 
-        print("=> Iteration {0} Abs Error {1:.3f} Delts {2:.3f}".format(i, err, prev_err-err))
+        print("=> Iteration {0} Abs Error {1:.3f} Delts {2:.3f}".format(i, err, prev_err - err))
 
     return (W, H)
 
 
 def matriz_arquivo(arquivo, ndig_treino=-1):
     """
-    Lê arquivo.txt e transforma em array Matriz
+    Lê arquivo.txt e transforma em array Matriz normalizada
         :param arquivo: Nome do arquivo
     """
 
@@ -338,6 +339,34 @@ def treinamento(d, p=10, ndig_treino=100):
     np.save('./treinamento/H'+str(d)+'.npy', H)
 
     return Wd
+
+
+def classificador(Wd):
+    '''
+    Classificador de digitos a partir de Wd
+    '''
+
+    n_test = 1000
+    A = matriz_arquivo("dados_mnist/test_images.txt", n_test)
+    n, n_test_ = A.shape
+    if n_test != n_test_:
+        raise ValueError("A leitura de A não foi correta ")
+
+    _Wd = Wd.copy()
+    Wd, H = resolve_mmq(A, Wd)
+    Wd = _Wd.copy()
+
+    C = A - np.dot(Wd, H)
+    c = np.zeros(n_test)
+    for j in range(n_test):
+        soma = 0
+        for i in range(n):
+            soma = soma + np.power(C[i][j], 2)
+        c[j] = soma
+
+    d = np.zeros(n_test)
+    e = np.zeros(n_test)
+
 
 if __name__ == "__main__":
 
