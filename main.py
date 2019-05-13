@@ -82,8 +82,9 @@ def rot_givens(W, n, m, i, j, c, s):
             \nNote que tipos inteiros levam a perdas severas \
             por arredondamento.".format(W.dtype))
 
+    n, m = W.shape
     col = 0
-    while (W[i][col] == 0 and W[j][col] == 0):
+    while (col < m) and (W[i][col] == 0 and W[j][col] == 0):
         col += 1
 
     for r in range(col, m):
@@ -163,11 +164,13 @@ def resolver_sist(W, A):
         n = n1
 
     H = np.ones((p, m))
-
     k = 1
     while k <= p:
+        # print("Columns: {0:02}/{1:02}".format(k, p), end = '\r')
         j = n
         while j >= k+1:
+            print("Columns: {2:02}/{3:02} Lines: {0:03}/{1:03}"
+                  .format(n - j + 1, n - k + 1, k, p), end='\r')
             i = j-1
             if W[j-1][k-1] != 0:
                 # n, m = W.shape
@@ -177,7 +180,7 @@ def resolver_sist(W, A):
                 rot_givens(A, n, m, i-1, j-1, _c, _s)
             j -= 1
         k += 1
-
+    print()
     k = p
     while k >= 1:
 
@@ -231,9 +234,10 @@ def normaliza(M):
     n, m = M.shape
     M_n = np.multiply(M, M)
     soma_colunas = np.sum(M_n, axis=0)
-    for i in range(n):
-        for j in range(m):
-            M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
+    np.divide(M, np.sqrt(soma_colunas), out=M)
+    # for i in range(n):
+    #     for j in range(m):
+    #         M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
 
 
 def resolve_mmq(A, W0):
@@ -264,6 +268,8 @@ def resolve_mmq(A, W0):
     # W = np.random.rand(n, p)
     # W = np.ones((n, p))
 
+    print("Starting MMQ algorithm")
+
     i = 0
     err = residuo(_A, W0, H)
     prev_err = err + 1
@@ -271,10 +277,8 @@ def resolve_mmq(A, W0):
     while (np.power(err - prev_err, 2) > np.power(ERR, 2)) and (i < MAX_ITER):
 
         i += 1
-        print(W)
         normaliza(W)
-        print(W)
-
+        print("- Solving for H")
         H = resolver_sist(W, A)
 
         H[H < 0] = 0.0
@@ -285,10 +289,10 @@ def resolve_mmq(A, W0):
         A_t = A.transpose()
         H_t = H.transpose()
 
+        print("- Solving for W_t")
         W_t = resolver_sist(H_t, A_t)
 
         W = W_t.transpose()
-        print(W)
 
         W[W < 0] = 0.0
 
@@ -298,10 +302,12 @@ def resolve_mmq(A, W0):
         prev_err = err
         err = residuo(A, W, H)
 
+        print("=> Iteration {0} Abs Error {1:.3f} Delts {2:.3f}".format(i, err, prev_err-err))
+
     return (W, H)
 
 
-def le_arquivo_matriz(arquivo):
+def matriz_arquivo(arquivo, ndig_treino=-1):
     """
     Lê arquivo.txt e transforma em array Matriz
         :param arquivo: Nome do arquivo
@@ -312,23 +318,24 @@ def le_arquivo_matriz(arquivo):
     with open(arquivo, "r+") as arq:
         for raw_linha in arq:
             raw_linha = raw_linha.strip('\n').split(' ')
-            linha = [float(num) for num in raw_linha]
+            linha = [float(num) for num in raw_linha[:ndig_treino]]
             matriz.append(linha)
-    return matriz
+    return np.array(matriz)/255.0
 
 
-def treinamento(d):
+def treinamento(d, p=10, ndig_treino=100):
     '''
     Executar treinamento do dígito d gerando a matriz Wd
     '''
 
-    A = np.array(matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt'))
+    A = matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt', ndig_treino)
+    print("Matrix loaded!")
     n, m = A.shape
-    p = 10
     W = np.random.rand(n, p)
     Wd, H = resolve_mmq(A, W)
 
-    np.save(Wd, 'treinamento/W'+str(d)+'.npy')
+    np.save('./treinamento/W'+str(d)+'.npy', Wd)
+    np.save('./treinamento/H'+str(d)+'.npy', H)
 
     return Wd
 
