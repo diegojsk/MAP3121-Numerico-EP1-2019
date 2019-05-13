@@ -18,17 +18,8 @@ H = np.array([[1/2, 1, 0],
 
 np.set_printoptions(precision=3, suppress=True)
 
-<<<<<<< HEAD
-X,Y = resolve_mmq(A, W)
-print(X)
-print(Y)
-#print(np.matmul(X,Y))
-
-
-=======
 P, Q = resolve_mmq(A, W)
 
 print(P)
 print()
 print(Q)
->>>>>>> b689866d9de4b835fa3139f44948db9f186a80ad
