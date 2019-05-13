@@ -317,6 +317,21 @@ def le_arquivo_matriz(arquivo):
     return matriz
 
 
+def treinamento(d):
+    '''
+    Executar treinamento do dígito d gerando a matriz Wd
+    '''
+
+    A = np.array(matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt'))
+    n, m = A.shape
+    p = 10
+    W = np.random.rand(n, p)
+    Wd, H = resolve_mmq(A, W)
+
+    np.save(Wd, 'treinamento/W'+str(d)+'.npy')
+
+    return Wd
+
 if __name__ == "__main__":
 
     '''

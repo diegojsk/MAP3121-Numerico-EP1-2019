@@ -7,4 +7,3 @@ import numpy as np
 
 
 print(matriz_arquivo('dados_mnist/train_dig0.txt'))
-
