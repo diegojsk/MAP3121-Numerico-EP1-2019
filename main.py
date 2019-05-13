@@ -4,17 +4,17 @@ from cmath import sqrt
 
 ERR = 1e-4
 MAX_ITER = 1e2
-SUPPORTED_FORMATS = [np.float32, np.float64, np.float_, 
+SUPPORTED_FORMATS = [np.float32, np.float64, np.float_,
                      np.complex64, np.complex128, np.complex_]
-
 
 def calc_c(a, b):
     """
-        Calcula o parâmetro c, definido na página 3 do enunciado 
+    Calcula o parâmetro c, definido na página 3 do enunciado
+
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
-    
-        :return: Cosseno do ângulo de rotação    
+
+        :return: Cosseno do ângulo de rotação
     """
     if a.dtype not in SUPPORTED_FORMATS:
         raise TypeError("Matriz de formato não suportado: {}! \
@@ -37,7 +37,8 @@ def calc_c(a, b):
 
 def calc_s(a, b):
     """
-        Calcula o parâmetro s, definido na página 3 do enunciado 
+    Calcula o parâmetro s, definido na página 3 do enunciado
+
         :param a: double w[i,k] - elemento da matriz W na posição (i, k)
         :param b: double w[j,k] - elemento da matriz W na posição (j, k)
 
@@ -52,19 +53,20 @@ def calc_s(a, b):
         raise TypeError("Matriz de formato não suportado: {}! \
             \nNote que tipos inteiros levam a perdas severas \
             por arredondamento.".format(b.dtype))
-        
+
     if abs(a) > abs(b):
         T = -np.divide(b, a)
         sen = calc_c(a, b)*T
     else:
-        T = -np.divide(a, b) 
+        T = -np.divide(a, b)
         sen = 1/np.sqrt(1+(T**2))
     return sen
 
 
 def rot_givens(W, n, m, i, j, c, s):
     """
-        Efetua a rotação de Givens para matriz W
+    Efetua a rotação de Givens para matriz W
+
         :param W: ndarray
         :param n: int Número de linhas de W
         :param m: int Número de colunas de W
@@ -92,7 +94,8 @@ def rot_givens(W, n, m, i, j, c, s):
 
 def zera_elemento(W, i, j, k):
     """
-        Realiza uma rotação de Givens de modo a zerar o elemento (j,k)
+    Realiza uma rotação de Givens de modo a zerar o elemento (j,k)
+
         :param W: ndarray
         :param i: linha a ser rotacionada
         :param j: linha a ser zerada
@@ -113,11 +116,13 @@ def zera_elemento(W, i, j, k):
 
 def fatorar_qr(W):
     """
-        Encontra a matriz R de modo que Q*R = W, onde Q é o resultado de
+    Encontra a matriz R de modo que Q*R = W, onde Q é o resultado de
     sucessivas matrizes de rotação de Givens e R é uma matriz triangular
     superior.
-        Ou seja, a função transforma a matriz W em uma matriz triangular
+
+    Ou seja, a função transforma a matriz W em uma matriz triangular
     superior por meio de sucessivas rotações de Givens
+
         :param W: ndarray
 
         :return: None
@@ -141,9 +146,9 @@ def fatorar_qr(W):
 
 def resolver_sist(W, A):
     """
-        Dadas matrizes W e A, encontra a matriz H, tal que W*H = A
+    Dadas matrizes W e A, encontra a matriz H, tal que W*H = A
 
-        Função Principal da Primeira Tarefa c) d)
+    Função Principal da Primeira Tarefa c) d)
 
         :param W: ndarray n;p
         :param A: ndarray n;m
@@ -192,7 +197,7 @@ def resolver_sist(W, A):
 
 def residuo(A, W, H):
     """
-        Calcula o quadrado da norma da matriz E = A-W*H
+    Calcula o quadrado da norma da matriz E = A-W*H
 
         :param W: ndarray n;m
         :param A: ndarray n;p
@@ -234,8 +239,11 @@ def normaliza(M):
 def resolve_mmq(A, W0):
 
     """
-    Resolve o  MMQ 
+    Encontra uma fatoração para a matriz A na forma A = W*H de modo que
+    W e H são matrizes não-negativas
+
     Função Principal da Segunda Tarefa
+
         :param A: Matriz a ser fatorada
         :param W0: Matriz W0 para determinação dos fatores
     """
@@ -259,7 +267,7 @@ def resolve_mmq(A, W0):
     i = 0
     err = residuo(_A, W0, H)
     prev_err = err + 1
-    
+
     while (np.power(err - prev_err, 2) > np.power(ERR, 2)) and (i < MAX_ITER):
 
         i += 1
@@ -289,7 +297,7 @@ def resolve_mmq(A, W0):
 
         prev_err = err
         err = residuo(A, W, H)
-        
+
     return (W, H)
 
 
@@ -300,15 +308,15 @@ def le_arquivo_matriz(arquivo):
     """
 
     matriz = []
-    
+
     with open(arquivo, "r+") as arq:
         for raw_linha in arq:
             raw_linha = raw_linha.strip('\n').split(' ')
             linha = [float(num) for num in raw_linha]
-        matriz.append(linha)
+            matriz.append(linha)
     return matriz
-    
-    
+
+
 if __name__ == "__main__":
 
     '''
