@@ -6,6 +6,7 @@ ERR = 1e-4
 MAX_ITER = 1e2
 SUPPORTED_FORMATS = [np.float32, np.float64, np.float_, np.complex64, np.complex128, np.complex_]
 
+
 def calc_c (a,b):
     """
     Calcula o parâmetro c, definido na página 3 do enunciado 
@@ -190,6 +191,7 @@ def residuo(A,W,H):
     erro = np.sum(np.power(err, 2))
     return erro
 
+
 def normaliza(M):
     """
     Normaliza a matriz M
@@ -205,6 +207,7 @@ def normaliza(M):
     for i in range(n):	    
         for j in range(m):	
             M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
+
 
 def calc_transpose(M):
     """
@@ -253,8 +256,10 @@ def resolve_mmq(A, W0):
     while (np.power(err - prev_err, 2) > np.power(ERR, 2)) and (i < MAX_ITER):
         
         i += 1
-
+        print(W)
         normaliza(W)
+        print(W)
+
         H = resolver_sist(W, A)
 
         H[ H < 0 ] = 0.0
@@ -268,6 +273,7 @@ def resolve_mmq(A, W0):
         W_t = resolver_sist(H_t, A_t)
         
         W = W_t.transpose()
+        print(W)
 
         W[ W < 0 ] = 0.0
 
@@ -278,6 +284,7 @@ def resolve_mmq(A, W0):
         err = residuo(A, W, H)
 
     return (W, H)
+
 
 if __name__ == "__main__":
 
