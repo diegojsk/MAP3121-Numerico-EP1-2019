@@ -184,7 +184,7 @@ def residuo(A,W,H):
 
 def normaliza(M):
     """
-    Normaliza a matriz M
+    Normaliza a matriz M conforme as colunas
         :param M: 
     """
     #soma_colunas = np.power(M.sum(axis=0), 1)
@@ -216,10 +216,8 @@ def resolve_mmq(A, W0):
     """
     Resolve o  MMQ 
     Função Principal da Segunda Tarefa
-        :param A:
-        :param W:
-        :param H:
-        :param err:
+        :param A: Matriz a ser fatorada
+        :param W0: Matriz W0 para determinação dos fatores
     """
 
     n1, p = W0.shape
@@ -239,7 +237,7 @@ def resolve_mmq(A, W0):
     # W = np.ones((n, p))
 
     i = 0
-    err = residuo(A, W, H)
+    err = residuo(_A, W0, H)
     prev_err = err + 1
     
     while (np.power(err - prev_err, 2) > np.power(ERR, 2)) and (i < MAX_ITER):
@@ -268,8 +266,33 @@ def resolve_mmq(A, W0):
 
         prev_err = err
         err = residuo(A, W, H)
+        
 
     return (W, H)
+
+
+def le_arquivo_matriz(arquivo):
+    '''
+    Lê arquivo.txt e transforma em array Matriz
+    '''
+    arq = open(arquivo,"r+")
+    texto = arq.readlines()
+    matriz = []
+    
+    for linha in texto:
+        linha=linha.strip('\n')
+        linha=linha.split(' ')
+        for i in range(len(linha)):
+            linha[i] = float(linha[i])
+            
+        matriz.append(linha)
+        
+    return matriz
+    
+    
+
+
+
 
 if __name__ == "__main__":
 
@@ -309,3 +332,4 @@ if __name__ == "__main__":
     # zera_elemento(b,W,2,3,0)
     # print(b)
     
+   
