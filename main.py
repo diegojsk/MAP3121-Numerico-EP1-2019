@@ -231,19 +231,6 @@ def normaliza(M):
             M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
 
 
-def calc_transpose(M):
-    """
-    Calcula a transposta da matriz M
-        :param M:
-    """
-    n, m = M.shape
-    M_t = np.empty((m, n))
-    for i in range(n):
-        for j in range(m):
-            M_t[j][i] = M[i][j]
-    return M_t
-
-
 def resolve_mmq(A, W0):
 
     """
