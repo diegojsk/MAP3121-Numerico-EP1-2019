@@ -187,9 +187,16 @@ def normaliza(M):
     Normaliza a matriz M
         :param M: 
     """
-    soma_colunas = np.power(M.sum(axis=0), 1)
-    n, m = M.shape
-    np.divide(M, soma_colunas, out=M)
+    #soma_colunas = np.power(M.sum(axis=0), 1)
+    #n, m = M.shape
+    #np.divide(M, soma_colunas, out=M)
+    
+    n,m = M.shape
+    M_n = np.multiply(M,M)
+    soma_colunas = np.sum(M_n, axis=0)
+    for i in range(n):	    
+        for j in range(m):	
+            M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
 
 def calc_transpose(M):
     """
