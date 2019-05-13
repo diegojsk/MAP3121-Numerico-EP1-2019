@@ -4,17 +4,16 @@ from cmath import sqrt
 
 ERR = 1e-4
 MAX_ITER = 1e2
-SUPPORTED_FORMATS = [np.float32, np.float64, np.float_, 
+SUPPORTED_FORMATS = [np.float32, np.float64, np.float_,
                      np.complex64, np.complex128, np.complex_]
 
 
 def calc_c(a, b):
     """
-        Calcula o parâmetro c, definido na página 3 do enunciado 
+        Calcula o parâmetro c, definido na página 3 do enunciado
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
-    
-        :return: Cosseno do ângulo de rotação    
+        :return: Cosseno do ângulo de rotação
     """
     if a.dtype not in SUPPORTED_FORMATS:
         raise TypeError("Matriz de formato não suportado: {}! \
@@ -52,12 +51,12 @@ def calc_s(a, b):
         raise TypeError("Matriz de formato não suportado: {}! \
             \nNote que tipos inteiros levam a perdas severas \
             por arredondamento.".format(b.dtype))
-        
+
     if abs(a) > abs(b):
         T = -np.divide(b, a)
         sen = calc_c(a, b)*T
     else:
-        T = -np.divide(a, b) 
+        T = -np.divide(a, b)
         sen = 1/np.sqrt(1+(T**2))
     return sen
 
@@ -247,7 +246,7 @@ def calc_transpose(M):
 def resolve_mmq(A, W0):
 
     """
-    Resolve o  MMQ 
+    Resolve o  MMQ
     Função Principal da Segunda Tarefa
         :param A: Matriz a ser fatorada
         :param W0: Matriz W0 para determinação dos fatores
@@ -272,7 +271,7 @@ def resolve_mmq(A, W0):
     i = 0
     err = residuo(_A, W0, H)
     prev_err = err + 1
-    
+
     while (np.power(err - prev_err, 2) > np.power(ERR, 2)) and (i < MAX_ITER):
 
         i += 1
@@ -302,32 +301,41 @@ def resolve_mmq(A, W0):
 
         prev_err = err
         err = residuo(A, W, H)
-        
+
 
     return (W, H)
 
 
-def le_arquivo_matriz(arquivo):
+def matriz_arquivo(arquivo):
     '''
     Lê arquivo.txt e transforma em array Matriz
     '''
-    arq = open(arquivo,"r+")
+    arq = open(arquivo, "r+")
     texto = arq.readlines()
     matriz = []
-    
+
     for linha in texto:
-        linha=linha.strip('\n')
-        linha=linha.split(' ')
+        linha = linha.strip('\n')
+        linha = linha.split(' ')
         for i in range(len(linha)):
             linha[i] = float(linha[i])
-            
         matriz.append(linha)
-        
     return matriz
-    
-    
 
+def treinamento(d):
+    '''
+    Executar treinamento do dígito d gerando a matriz Wd
+    '''
 
+    A = np.array(matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt'))
+    n, m = A.shape
+    p = 10
+    W = np.random.rand(n, p)
+    Wd, H = resolve_mmq(A, W)
+
+    np.save(Wd, 'treinamento/W'+str(d)+'.npy')
+
+    return Wd
 
 
 if __name__ == "__main__":
@@ -366,3 +374,6 @@ if __name__ == "__main__":
     # print(b)
     # zera_elemento(b,W,2,3,0)
     # print(b)
+
+
+
