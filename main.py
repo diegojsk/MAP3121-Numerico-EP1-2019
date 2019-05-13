@@ -290,33 +290,25 @@ def resolve_mmq(A, W0):
         prev_err = err
         err = residuo(A, W, H)
         
-
     return (W, H)
 
 
 def le_arquivo_matriz(arquivo):
-    '''
+    """
     Lê arquivo.txt e transforma em array Matriz
-    '''
-    arq = open(arquivo,"r+")
-    texto = arq.readlines()
+        :param arquivo: Nome do arquivo
+    """
+
     matriz = []
     
-    for linha in texto:
-        linha=linha.strip('\n')
-        linha=linha.split(' ')
-        for i in range(len(linha)):
-            linha[i] = float(linha[i])
-            
+    with open(arquivo, "r+") as arq:
+        for raw_linha in arq:
+            raw_linha = raw_linha.strip('\n').split(' ')
+            linha = [float(num) for num in raw_linha]
         matriz.append(linha)
-        
     return matriz
     
     
-
-
-
-
 if __name__ == "__main__":
 
     '''
