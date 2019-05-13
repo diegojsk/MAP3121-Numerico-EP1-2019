@@ -137,27 +137,35 @@ def resolver_sist(W, A):
     else:
         n = n1
 
-    H = np.zeros((p, m))
+    H = np.ones((p, m))
 
-    for k in range(p):
-        j = n-1
+    k = 1
+    while k <= p:
+        j = n
         while j >= k+1:
             i = j-1
-            if W[j][k] != 0 :
+            if W[j-1][k-1] != 0 :
                 # n, m = W.shape
-                _s = calc_s(W[i][k], W[j][k])
-                _c = calc_c(W[i][k], W[j][k])
-                rot_givens(W,n,p,i,j,_c,_s)
-                rot_givens(A,n,m,i,j,_c,_s)
+                _s = calc_s(W[i-1][k-1], W[j-1][k-1])
+                _c = calc_c(W[i-1][k-1], W[j-1][k-1])
+                rot_givens(W,n,p,i-1,j-1,_c,_s)
+                rot_givens(A,n,m,i-1,j-1,_c,_s)
             j -= 1
+        k += 1
 
-    intervalo = [i for i in range(p)]
-    for k in intervalo[::-1]:
-        soma = 0
-        for i in range(k+1,p):
-            soma = soma + W[k][i]*H[i][j]
-        for j in range(m):
-            H[k][j] = (A[k][j] - soma)/W[k][k]
+    k = p
+    while k >= 1:
+
+        j = 1
+        while j <= m:
+            soma = 0.0
+            i = k + 1
+            while i <= p:
+                soma += W[k-1][i-1]*H[i-1][j-1]
+                i += 1
+            H[k-1][j-1] = (A[k-1][j-1] - soma)/W[k-1][k-1]
+            j += 1
+        k -= 1
 
     return H
 
