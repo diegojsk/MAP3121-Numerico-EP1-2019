@@ -314,7 +314,7 @@ def resolve_mmq(A, W0):
 
 def matriz_arquivo(arquivo, ndig_treino=-1):
     """
-    Lê arquivo.txt e transforma em array Matriz
+    Lê arquivo.txt e transforma em array Matriz normalizada
         :param arquivo: Nome do arquivo
     """
 
@@ -345,6 +345,34 @@ def treinamento(d, p=10, ndig_treino=100):
     np.save('./{0}/H{1}.npy'.format(folder, d), H)
 
     return Wd
+
+
+def classificador(Wd):
+    '''
+    Classificador de digitos a partir de Wd
+    '''
+
+    n_test = 1000
+    A = matriz_arquivo("dados_mnist/test_images.txt", n_test)
+    n, n_test_ = A.shape
+    if n_test != n_test_:
+        raise ValueError("A leitura de A não foi correta ")
+
+    _Wd = Wd.copy()
+    Wd, H = resolve_mmq(A, Wd)
+    Wd = _Wd.copy()
+
+    C = A - np.dot(Wd, H)
+    c = np.zeros(n_test)
+    for j in range(n_test):
+        soma = 0
+        for i in range(n):
+            soma = soma + np.power(C[i][j], 2)
+        c[j] = soma
+
+    d = np.zeros(n_test)
+    e = np.zeros(n_test)
+
 
 if __name__ == "__main__":
 
