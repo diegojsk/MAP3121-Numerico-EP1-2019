@@ -276,7 +276,7 @@ def resolve_mmq(A, W0):
 
     i = 0
     err = residuo(_A, W0, H)
-    prev_err = err + 1
+    prev_err = 0
 
     while (np.abs(err - prev_err) > ERR) and (i < MAX_ITER):
         begin = time.time()
