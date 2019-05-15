@@ -104,7 +104,7 @@ def rot_givens(W, n, m, i, j, c, s):
     #     W[i][r] = aux
 
 
-def zera_elemento(W, i, j, k):
+def zerar_elemento(W, i, j, k):
     """
     Realiza uma rotação de Givens de modo a zerar o elemento (j,k)
 
@@ -150,7 +150,7 @@ def fatorar_qr(W):
         for j in range(n-1, k, -1):
             i = j-1
             if W[j][k] != 0:
-                # zera_elemento(W,W,i,j,k)
+                # zerar_elemento(W,W,i,j,k)
                 _s = calc_s(W[i][k], W[j][k])
                 _c = calc_c(W[i][k], W[j][k])
                 rot_givens(W, n, m, i, j, _c, _s)
@@ -233,9 +233,9 @@ def residuo(A, W, H):
     return erro
 
 
-def normaliza(M):
+def normalizar(M):
     """
-    Normaliza a matriz M, de modo que a norma de todas as suas colunas
+    normalizar a matriz M, de modo que a norma de todas as suas colunas
     é igual a zero
 
         :param M: ndarray
@@ -295,7 +295,7 @@ def resolve_mmq(A, W0):
     while (np.abs(err - prev_err) > ERR) and (i < MAX_ITER):
         begin = time.time()
         i += 1
-        normaliza(W)
+        normalizar(W)
         print("- Solving for H")
         H = resolver_sist(W, A)
 
@@ -328,10 +328,10 @@ def resolve_mmq(A, W0):
 
 def matriz_arquivo(arquivo, ndig_treino=-1):
     """
-    Lê arquivo.txt e transforma em array Matriz normalizada
+    Lê arquivo.txt e transforma em array Matriz normalizarda
         :param arquivo: Nome do arquivo
 
-        :return: matriz extraída do arquivo normalizada
+        :return: matriz extraída do arquivo normalizarda
     """
 
     matriz = []
@@ -344,7 +344,7 @@ def matriz_arquivo(arquivo, ndig_treino=-1):
     return np.array(matriz)/255.0
 
 
-def treinamento(d, p=10, ndig_treino=100):
+def treinar(d, p=10, ndig_treino=100):
     '''
     Executar treinamento do dígito d gerando a matriz Wd
           :param d: dígito d
@@ -366,7 +366,7 @@ def treinamento(d, p=10, ndig_treino=100):
     return Wd
 
 
-def classificador(Wd):
+def classificar(Wd):
     '''
     Classificador de digitos a partir de Wd
     '''
@@ -406,7 +406,7 @@ if __name__ == "__main__":
                   [0,  0, -1,  1,  2],
                   [0,  0,  0,  3,  1]]).astype(np.double)
 
-    zera_elemento(W, 2, 3, 2)
+    zerar_elemento(W, 2, 3, 2)
     print(W*np.sqrt(5))
     print(W)
 
@@ -427,5 +427,5 @@ if __name__ == "__main__":
 
     # b = np.array([[1],[1],[1],[1],[1]]).astype(np.double)
     # print(b)
-    # zera_elemento(b,W,2,3,0)
+    # zerar_elemento(b,W,2,3,0)
     # print(b)
