@@ -82,9 +82,16 @@ def rot_givens(W, n, m, i, j, c, s):
             \nNote que tipos inteiros levam a perdas severas \
             por arredondamento.".format(W.dtype))
 
+    '''
+    Implementação mais eficiente da Rotação de Givens
+    '''
     aux = c*W[i, :] - s*W[j, :]
     W[j, :] = s*W[i, :] + c*W[j, :]
     W[i, :] = aux
+
+    '''
+    Pseudo-código do enunciado
+    '''
 
     # for r in range(col, m):
     # n, m = W.shape
@@ -153,7 +160,7 @@ def resolver_sist(W, A):
     """
     Dadas matrizes W e A, encontra a matriz H, tal que W*H = A
 
-    Função Principal da Primeira Tarefa c) d)
+    Função Principal da Primeira Tarefa a), b), c) e d)
 
         :param W: ndarray n;p
         :param A: ndarray n;m
@@ -204,11 +211,13 @@ def resolver_sist(W, A):
 
 def residuo(A, W, H):
     """
-    Calcula o quadrado da norma da matriz E = A-W*H
+    Calcula o resíduo quadrático para | A - W*H |
 
         :param W: ndarray n;m
         :param A: ndarray n;p
         :param W: ndarray p;m
+
+        :return erro: erro calculado
     """
     na, ma = A.shape
     nw, pw = W.shape
@@ -230,6 +239,8 @@ def normaliza(M):
     é igual a zero
 
         :param M: ndarray
+
+        :return: None
     """
     # soma_colunas = np.power(M.sum(axis=0), 1)
     # n, m = M.shape
@@ -254,6 +265,9 @@ def resolve_mmq(A, W0):
 
         :param A: Matriz a ser fatorada
         :param W0: Matriz W0 para determinação dos fatores
+
+        :return W: matriz W da fatoração não negativa de A
+        :return H: matriz H da fatoração não negativa de A
     """
 
     n1, p = W0.shape
@@ -316,6 +330,8 @@ def matriz_arquivo(arquivo, ndig_treino=-1):
     """
     Lê arquivo.txt e transforma em array Matriz normalizada
         :param arquivo: Nome do arquivo
+
+        :return: matriz extraída do arquivo normalizada
     """
 
     matriz = []
@@ -331,6 +347,9 @@ def matriz_arquivo(arquivo, ndig_treino=-1):
 def treinamento(d, p=10, ndig_treino=100):
     '''
     Executar treinamento do dígito d gerando a matriz Wd
+          :param d: dígito d
+          :param p: parâmetro p de Wd nxp
+          :param ndig_treino:
     '''
 
     folder = "{0}-{1}".format(ndig_treino, p)
