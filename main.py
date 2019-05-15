@@ -276,7 +276,7 @@ def resolve_mmq(A, W0):
 
     i = 0
     err = residuo(_A, W0, H)
-    prev_err = 0
+    prev_err = 0.0
 
     while (np.abs(err - prev_err) > ERR) and (i < MAX_ITER):
         begin = time.time()
@@ -285,7 +285,7 @@ def resolve_mmq(A, W0):
         print("- Solving for H")
         H = resolver_sist(W, A)
 
-        H[H < 0] = 0.0
+        H[H < 0.0] = 0.0
         _H = H.copy()
 
         A = _A.copy()
@@ -298,7 +298,7 @@ def resolve_mmq(A, W0):
 
         W = W_t.transpose()
 
-        W[W < 0] = 0.0
+        W[W < 0.0] = 0.0
 
         A = _A.copy()
         H = _H.copy()

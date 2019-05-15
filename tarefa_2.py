@@ -34,7 +34,7 @@ np.set_printoptions(precision=3, suppress=True)
 Outros exemplos
 '''
 
-W = np.array([[96759699.3224, -2424353.0], [2245.78, 2535.0], [0.34434, 34343.434]])
+W = np.array([[12.0, 3.0], [5.0, 1.0], [1.0, -4.0]])
 
 _A = A.copy()
 
@@ -47,5 +47,3 @@ print()
 print(Q)
 
 print(np.matmul(P, Q))
-
-
