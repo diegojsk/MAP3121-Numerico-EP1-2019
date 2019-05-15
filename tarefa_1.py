@@ -6,9 +6,9 @@ from main import *
 import numpy as np
 
 """
-item a) 
+item a)
 """
-    
+
 n = 64
 m = 64
 A = np.zeros((n,m))
@@ -21,11 +21,10 @@ for i in range(n):
         elif abs(i-j) > 1:
                 A[i][j] = 0
         else:
-                A[i][j] = 0 
-                
+                A[i][j] = 0
+
 print(A)
 fatorar_qr(A)
-
 
 for i in range(n):
     for j in range(m):
@@ -74,7 +73,7 @@ for i in range(n):
 item c)
 '''
 
-n = 64 
+n = 64
 p = 64
 W = np.zeros((n,p))
 for i in range(n):

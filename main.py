@@ -1,7 +1,12 @@
+'''
+Diego Jun Sato Kurashima - 10274231
+Felipe Gomes de Melo D'Elia - 10340624
+'''
 import numpy as np
 import math
 import time
 from cmath import sqrt
+import os
 
 ERR = 1e-4
 MAX_ITER = 1e2
@@ -193,8 +198,8 @@ def resolver_sist(W, A):
         k += 1
     print()
     k = p
-    while k >= 1:
 
+    while k >= 1:
         j = 1
         while j <= m:
             soma = 0.0
@@ -352,7 +357,7 @@ def treinar(d, p=10, ndig_treino=100):
           :param ndig_treino:
     '''
 
-    folder = "{0}-{1}".format(ndig_treino, p)
+    folder = "./{0}-{1}/".format(ndig_treino, p)
 
     A = matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt', ndig_treino)
     print("Matrix loaded!")
@@ -360,37 +365,110 @@ def treinar(d, p=10, ndig_treino=100):
     W = np.random.rand(n, p)
     Wd, H = resolve_mmq(A, W)
 
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
     np.save('./{0}/W{1}.npy'.format(folder, d), Wd)
     np.save('./{0}/H{1}.npy'.format(folder, d), H)
 
     return Wd
 
 
-def classificar(Wd):
+def fatorar_digito(d, n_train=100, p=5):
     '''
-    Classificador de digitos a partir de Wd
+    Calcular H a partir de Wd e retornar o erro de A-Wd*H
+       :param Wd: matriz Wd para certo d
+
+       :return c: erro associado a A-Wd*H
     '''
 
     n_test = 1000
-    A = matriz_arquivo("dados_mnist/test_images.txt", n_test)
+    A = matriz_arquivo("./dados_mnist/test_images.txt", n_test)
     n, n_test_ = A.shape
     if n_test != n_test_:
         raise ValueError("A leitura de A não foi correta ")
 
-    _Wd = Wd.copy()
-    Wd, H = resolve_mmq(A, Wd)
-    Wd = _Wd.copy()
+    Wd = np.load("./{0}-{1}/W{2}.npy".format(n_train, p, d))
 
-    C = A - np.dot(Wd, H)
+    # _Wd = Wd.copy()
+    Wd, H = resolve_mmq(A, Wd.copy())
+    # Wd = _Wd.copy()
+
+    p, k = H.shape
+    if k != n_test:
+        raise ValueError("Matriz H não é compatível")
+
+    C = A - np.matmul(Wd, H)
     c = np.zeros(n_test)
     for j in range(n_test):
         soma = 0
         for i in range(n):
             soma = soma + np.power(C[i][j], 2)
-        c[j] = soma
+        c[j] = np.square(soma)
 
+    return c
+
+def classificar():
+    '''
+    Classificar as imagens
+            :param :
+
+            :return d: retornar os digitos calculados para cada imagem
+    '''
+
+    n_test = 1000
     d = np.zeros(n_test)
     e = np.zeros(n_test)
+
+    erros = np.empty(n_test)
+
+    for d in range(10):
+        a = fatorar_digito(d)
+        erros[d] = a
+
+    for j in range(n_test):
+        e[j] = erros[0]
+        d[j] = 0
+        for d in range(1, 10):
+            if erros[j] < e[j]:
+                e[j] = erros[j]
+                d[j] = d
+
+    return d
+
+def analisar(estimativa):
+    '''
+    Analisar o percentual de acertos
+        :param estimativa: None
+
+        :return : None
+    '''
+
+    '''
+    Leitura dos índices corretos a partir de test_index.txt
+    '''
+    n_test = 1000
+    index = np.empty(1000)
+    with open("./dados_mnist/test_index.txt", "r+") as arq:
+        for i, raw_linha in enumerate(arq):
+            # raw_linha = raw_linha.strip('\n').split(' ')
+            # linha = [int(num) for num in raw_linha[:ndig_treino]]
+            # index[i] = linha
+            index[i] = int(raw_linha.strip('\n'))
+
+    total = [np.sum(index == i) for i in range(10)]
+
+    acertos = np.empty(10)
+    for i in range(n_test):
+        if estimativa[i] == index[j]:
+            acertos[index[j]] += 1
+    porcentagem = (acertos/total)*100
+
+    for 
+
+    return porcentagem_total
+
+
 
 
 if __name__ == "__main__":
