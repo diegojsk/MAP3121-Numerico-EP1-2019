@@ -420,12 +420,27 @@ def classificar(n_test=1000, n_train=100, p=5):
             :return d: retornar os digitos calculados para cada imagem
     '''
 
+    folder = "./estimador/"
+
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
     digito = np.zeros(n_test)
     menor_erro = np.zeros(n_test)
 
     erros = np.empty((n_test, 10))
 
-    err = np.array([fatorar_digito(d, n_test=n_test, n_train=n_train, p=p) for d in range(10)])
+    raw_err = []
+    try:
+        for d in range(10):
+            raw_err.append(fatorar_digito(d, n_test=n_test, n_train=n_train, p=p))
+    except:
+        print("[LOG] Arquivo não encontrado!")
+        np.save(folder + "{0}-{1}.npy".format(n_test, p), np.array(raw_err))
+        return 0
+
+    err = np.array(raw_err)
+    np.save(folder + "errors-{0}-{1}.npy".format(n_test, p), err)
 
     erros = err.transpose().copy()
 
@@ -439,12 +454,8 @@ def classificar(n_test=1000, n_train=100, p=5):
     #             menor_erro[j] = erros[j]
     #             digito[j] = d
 
-    folder = "./estimador/"
-
-    if not os.path.isdir(folder):
-        os.mkdir(folder)
-
     np.save(folder + "{0}-{1}.npy".format(n_test, p), digito)
+
 
 def analisar(estimativa):
     '''

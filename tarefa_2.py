@@ -5,6 +5,8 @@ Segunda Tarefa
 from main import *
 import numpy as np
 
+np.set_printoptions(precision=3, suppress=True)
+
 '''
 Teste Segunda Tarefa - exemplo do enunciado
 '''
@@ -31,19 +33,66 @@ print()
 print(Q)
 
 '''
-Outros exemplos
+item c)
 '''
 
-# W = np.array([[12.0, 3.0], [5.0, 1.0], [1.0, -4.0]])
+n = 64
+p = 64
+W = np.zeros((n, p))
+for i in range(n):
+    for j in range(p):
+        if i == j:
+            W[i][j] = 2
+        elif abs(i-j) == 1:
+            W[i][j] = 1
+        elif abs(i-j) > 1:
+            W[i][j] = 0
+        else:
+            W[i][j] = 0
 
-# _A = A.copy()
+m = 3
+A = np.zeros((n, m))
+for i in range(n):
+    for j in range(m):
+        if j == 1-1 :
+            A[i][j] = 1
+        elif j == 2-1:
+            A[i][j] = i + 1
+        elif j == 3-1:
+            A[i][j] = 2*(i+1) - 1
 
-# np.set_printoptions(precision=3, suppress=True)
+H = resolver_sist(W, A)
+print(H)
 
-# P, Q = resolve_mmq(_A, W)
 
-# print(P)
-# print()
-# print(Q)
+"""
+item d)
+"""
 
-# print(np.matmul(P, Q))
+n = 20
+p = 17
+W = np.zeros((n, p))
+##print(W)
+for i in range(n):
+    for j in range(p):
+        if abs(i-j) <= 4:
+            W[i][j] = 1/((i+1+j+1-1))
+        elif abs(i-j) > 4:
+            W[i][j] = 0
+        else:
+            W[i][j] = 0
+
+m = 3
+A = np.zeros((n, m))
+for i in range(n):
+    for j in range(m):
+        if j == 1-1:
+            A[i][j] = 1
+        elif j == 2-1:
+            A[i][j] = i + 1
+        elif j == 3-1:
+            A[i][j] = 2*(i+1) - 1
+
+H = resolver_sist(W, A)
+
+print(H)
