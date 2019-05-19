@@ -182,9 +182,11 @@ def resolver_sist(W, A):
     H = np.ones((p, m))
     k = 1
     while k <= p:
-        # print("Columns: {0:02}/{1:02}".format(k, p), end = '\r')
+        # print("K: {}".format(k-1))
+        print("Columns: {0:02}/{1:02}".format(k, p), end = '\r')
         j = n
         while j >= k+1:
+            # print("=> J: {}".format(j-1))
             print("Columns: {2:02}/{3:02} Lines: {0:03}/{1:03}"
                   .format(n - j + 1, n - k + 1, k, p), end='\r')
             i = j-1
@@ -374,7 +376,7 @@ def treinar(d, p=10, ndig_treino=100):
     return Wd
 
 
-def fatorar_digito(d, n_train=100, p=5):
+def fatorar_digito(d, n_test=1000, n_train=100, p=5):
     '''
     Calcular H a partir de Wd e retornar o erro de A-Wd*H
        :param Wd: matriz Wd para certo d
@@ -382,7 +384,7 @@ def fatorar_digito(d, n_train=100, p=5):
        :return c: erro associado a A-Wd*H
     '''
 
-    n_test = 1000
+    print("[LOG] Testing digit {0}".format(d))
     A = matriz_arquivo("./dados_mnist/test_images.txt", n_test)
     n, n_test_ = A.shape
     if n_test != n_test_:
@@ -400,15 +402,17 @@ def fatorar_digito(d, n_train=100, p=5):
 
     C = A - np.matmul(Wd, H)
     c = np.zeros(n_test)
-    for j in range(n_test):
-        soma = 0
-        for i in range(n):
-            soma = soma + np.power(C[i][j], 2)
-        c[j] = np.square(soma)
+    c[:] = np.sum(np.power(C, 2), axis=0)
+    # for j in range(n_test):
+    #     soma = 0
+    #     for i in range(n):
+    #         soma = soma + 
+    #     c[j] = np.square(soma)
 
     return c
 
-def classificar():
+
+def classificar(n_test=1000, n_train=100, p=5):
     '''
     Classificar as imagens
             :param :
@@ -416,25 +420,31 @@ def classificar():
             :return d: retornar os digitos calculados para cada imagem
     '''
 
-    n_test = 1000
-    d = np.zeros(n_test)
-    e = np.zeros(n_test)
+    digito = np.zeros(n_test)
+    menor_erro = np.zeros(n_test)
 
-    erros = np.empty(n_test)
+    erros = np.empty((n_test, 10))
 
-    for d in range(10):
-        a = fatorar_digito(d)
-        erros[d] = a
+    err = np.array([fatorar_digito(d, n_test=n_test, n_train=n_train, p=p) for d in range(10)])
 
-    for j in range(n_test):
-        e[j] = erros[0]
-        d[j] = 0
-        for d in range(1, 10):
-            if erros[j] < e[j]:
-                e[j] = erros[j]
-                d[j] = d
+    erros = err.transpose().copy()
 
-    return d
+    digito[:] = np.argmin(erros, axis=1)
+
+    # for j in range(n_test):
+    #     menor_erro[j] = erros[0]
+    #     digito[j] = 0
+    #     for d in range(1, 10):
+    #         if erros[j] < menor_erro[j]:
+    #             menor_erro[j] = erros[j]
+    #             digito[j] = d
+
+    folder = "./estimador/"
+
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
+    np.save(folder + "{0}-{1}.npy".format(n_test, p), digito)
 
 def analisar(estimativa):
     '''
@@ -448,31 +458,43 @@ def analisar(estimativa):
     Leitura dos índices corretos a partir de test_index.txt
     '''
     n_test = 1000
-    index = np.empty(1000)
+    index = np.zeros(n_test).astype(np.int)
     with open("./dados_mnist/test_index.txt", "r+") as arq:
         for i, raw_linha in enumerate(arq):
             # raw_linha = raw_linha.strip('\n').split(' ')
             # linha = [int(num) for num in raw_linha[:ndig_treino]]
             # index[i] = linha
-            index[i] = int(raw_linha.strip('\n'))
+            if i < n_test:
+                index[i] = int(raw_linha.strip('\n'))
 
-    total = [np.sum(index == i) for i in range(10)]
+    total = np.array([np.sum(index == i) for i in range(10)])
+
+    # acertos = index == estimativa
 
     acertos = np.empty(10)
-    for i in range(n_test):
-        if estimativa[i] == index[j]:
-            acertos[index[j]] += 1
-    porcentagem = (acertos/total)*100
+    for resp, gaba in zip(estimativa, index):
+        if int(gaba) == int(resp):
+            acertos[int(gaba)] += 1
 
-    for 
+    porcentagem = (acertos.astype(np.int)*1000/total)
 
-    return porcentagem_total
-
-
+    return acertos, porcentagem
+    # return porcentagem_total
 
 
 if __name__ == "__main__":
 
+    np.set_printoptions(precision=3, suppress=True)
+    a = np.load("./estimador/1000-15.npy")
+    T, A = analisar(a)
+    for d, i in enumerate(A):
+        print("{0}: {1:.2f}%".format(d, i/10))
+    print("")
+
+
+
+
+if False:
     '''
     Matriz W do enunciado
     '''
