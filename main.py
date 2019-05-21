@@ -382,29 +382,22 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
     '''
 
     print("[LOG] Testing digit {0}".format(d))
-    A = matriz_arquivo("./dados_mnist/test_images.txt", n_test)
+    A = matriz_arquivo(PATH + "./dados_mnist/test_images.txt", n_test)
     n, n_test_ = A.shape
     if n_test != n_test_:
         raise ValueError("A leitura de A não foi correta ")
 
-    Wd = np.load("./{0}-{1}/W{2}.npy".format(n_train, p, d))
+    Wd = np.load(PATH + "./{0}-{1}/W{2}.npy".format(n_train, p, d))
 
-    # _Wd = Wd.copy()
-    Wd, H = resolve_mmq(A, Wd.copy())
-    # Wd = _Wd.copy()
+    H = resolver_sist(Wd.copy(), A)
 
     p, k = H.shape
     if k != n_test:
         raise ValueError("Matriz H não é compatível")
 
-    C = A - np.matmul(Wd, H)
+    res = A - np.matmul(Wd, H)
     c = np.zeros(n_test)
-    c[:] = np.sum(np.power(C, 2), axis=0)
-    # for j in range(n_test):
-    #     soma = 0
-    #     for i in range(n):
-    #         soma = soma + 
-    #     c[j] = np.square(soma)
+    c[:] = np.sum(np.power(res, 2), axis=0)
 
     return c
 
