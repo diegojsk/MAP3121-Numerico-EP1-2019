@@ -23,15 +23,15 @@ def calc_c(a, b):
 
         :return: Cosseno do ângulo de rotação
     """
-    if a.dtype not in SUPPORTED_FORMATS:
-        raise TypeError("Matriz de formato não suportado: {}! \
-            \nNote que tipos inteiros levam a perdas severas \
-            por arredondamento.".format(a.dtype))
+    # if a.dtype not in SUPPORTED_FORMATS:
+    #     raise TypeError("Matriz de formato não suportado: {}! \
+    #         \nNote que tipos inteiros levam a perdas severas \
+    #         por arredondamento.".format(a.dtype))
 
-    if b.dtype not in SUPPORTED_FORMATS:
-        raise TypeError("Matriz de formato não suportado: {}! \
-            \nNote que tipos inteiros levam a perdas severas \
-            por arredondamento.".format(b.dtype))
+    # if b.dtype not in SUPPORTED_FORMATS:
+    #     raise TypeError("Matriz de formato não suportado: {}! \
+    #         \nNote que tipos inteiros levam a perdas severas \
+    #         por arredondamento.".format(b.dtype))
 
     if abs(a) > abs(b):
         T = -np.divide(b, a)
@@ -50,15 +50,15 @@ def calc_s(a, b):
 
         :return: Seno do ângulo de rotação
     """
-    if a.dtype not in SUPPORTED_FORMATS:
-        raise TypeError("Matriz de formato não suportado: {}! \
-            \nNote que tipos inteiros levam a perdas severas \
-            por arredondamento.".format(a.dtype))
+    # if a.dtype not in SUPPORTED_FORMATS:
+    #     raise TypeError("Matriz de formato não suportado: {}! \
+    #         \nNote que tipos inteiros levam a perdas severas \
+    #         por arredondamento.".format(a.dtype))
 
-    if b.dtype not in SUPPORTED_FORMATS:
-        raise TypeError("Matriz de formato não suportado: {}! \
-            \nNote que tipos inteiros levam a perdas severas \
-            por arredondamento.".format(b.dtype))
+    # if b.dtype not in SUPPORTED_FORMATS:
+    #     raise TypeError("Matriz de formato não suportado: {}! \
+    #         \nNote que tipos inteiros levam a perdas severas \
+    #         por arredondamento.".format(b.dtype))
 
     if abs(a) > abs(b):
         T = -np.divide(b, a)
@@ -82,10 +82,10 @@ def rot_givens(W, n, m, i, j, c, s):
 
         :return: None
     """
-    if W.dtype not in SUPPORTED_FORMATS:
-        raise TypeError("Matriz de formato não suportado: {}! \
-            \nNote que tipos inteiros levam a perdas severas \
-            por arredondamento.".format(W.dtype))
+    # if W.dtype not in SUPPORTED_FORMATS:
+    #     raise TypeError("Matriz de formato não suportado: {}! \
+    #         \nNote que tipos inteiros levam a perdas severas \
+    #         por arredondamento.".format(W.dtype))
 
     '''
     Implementação mais eficiente da Rotação de Givens
@@ -307,8 +307,6 @@ def fatorar_wh(A, p):
         print("- Solving for W_t")
         W = resolver_sist(H_t, A_t).transpose()
 
-        W = W_t.transpose().copy()
-
         W[W < 0.0] = 0.0
 
         A = _A.copy()
@@ -354,14 +352,12 @@ def treinar(d, p=10, ndig_treino=100):
     A = matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt', ndig_treino)
     print("Matrix loaded!")
     n, m = A.shape
-    W = np.random.rand(n, p)
-    Wd, H = resolve_mmq(A, W)
+    Wd, H = fatorar_wh(A, p)
 
     if not os.path.isdir(folder):
         os.mkdir(folder)
 
     np.save('./{0}/W{1}.npy'.format(folder, d), Wd)
-    np.save('./{0}/H{1}.npy'.format(folder, d), H)
 
     return Wd
 
@@ -382,7 +378,7 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
 
     Wd = np.load(PATH + "./{0}-{1}/W{2}.npy".format(n_train, p, d))
 
-    H = resolver_sist(Wd.copy(), A)
+    H = resolver_sist(Wd.copy(), A.copy())
 
     p, k = H.shape
     if k != n_test:
@@ -413,31 +409,16 @@ def classificar(n_test=1000, n_train=100, p=5):
 
     erros = np.empty((n_test, 10))
 
-    raw_err = []
-    try:
-        for d in range(10):
-            raw_err.append(fatorar_digito(d, n_test=n_test, n_train=n_train, p=p))
-    except:
-        print("[LOG] Arquivo não encontrado!")
-        np.save(folder + "{0}-{1}.npy".format(n_test, p), np.array(raw_err))
-        return 0
+    raw_err = [fatorar_digito(d, n_test=n_test, n_train=n_train, p=p)
+               for d in range(10)]
 
     err = np.array(raw_err)
-    np.save(folder + "errors-{0}-{1}.npy".format(n_test, p), err)
 
     erros = err.transpose().copy()
 
     digito[:] = np.argmin(erros, axis=1)
-
-    # for j in range(n_test):
-    #     menor_erro[j] = erros[0]
-    #     digito[j] = 0
-    #     for d in range(1, 10):
-    #         if erros[j] < menor_erro[j]:
-    #             menor_erro[j] = erros[j]
-    #             digito[j] = d
-
-    np.save(folder + "{0}-{1}.npy".format(n_test, p), digito)
+    np.save(folder + "{0}-{1}.npy".format(n_train, p), digito)
+    analisar(digito)
 
 
 def analisar(estimativa):
@@ -460,17 +441,17 @@ def analisar(estimativa):
             # index[i] = linha
             if i < n_test:
                 index[i] = int(raw_linha.strip('\n'))
+            else:
+                break
 
     total = np.array([np.sum(index == i) for i in range(10)])
 
-    # acertos = index == estimativa
-
-    acertos = np.empty(10)
+    acertos = np.zeros(10)
     for resp, gaba in zip(estimativa, index):
         if int(gaba) == int(resp):
             acertos[int(gaba)] += 1
 
-    porcentagem = (acertos.astype(np.int)*1000/total)
+    porcentagem = (acertos*10000/total)
 
     return acertos, porcentagem
     # return porcentagem_total
@@ -479,47 +460,15 @@ def analisar(estimativa):
 if __name__ == "__main__":
 
     np.set_printoptions(precision=3, suppress=True)
-    a = np.load("./estimador/1000-15.npy")
-    T, A = analisar(a)
-    for d, i in enumerate(A):
-        print("{0}: {1:.2f}%".format(d, i/10))
-    print("")
 
+    train = [4000]
+    ps = [10]
 
-
-
-if False:
-    '''
-    Matriz W do enunciado
-    '''
-    np.set_printoptions(precision=3, suppress=True)
-
-    W = np.array([[2,  1,  1, -1,  1],
-                  [0,  3,  0,  1,  2],
-                  [0,  0,  2,  2, -1],
-                  [0,  0, -1,  1,  2],
-                  [0,  0,  0,  3,  1]]).astype(np.double)
-
-    zerar_elemento(W, 2, 3, 2)
-    print(W*np.sqrt(5))
-    print(W)
-
-    '''
-    Verificar se é triangular
-    '''
-
-    fatorar_qr(W)
-    print(W)
-    for i in range(5):
-        for j in range(5):
-            if i > j:
-                print(W[i][j])
-
-    '''
-    Matriz b qualquer
-    '''
-
-    # b = np.array([[1],[1],[1],[1],[1]]).astype(np.double)
-    # print(b)
-    # zerar_elemento(b,W,2,3,0)
-    # print(b)
+    for n_train in train:
+        for p in ps:
+            digito = np.load("./estimador/{}-{}.npy".format(n_train, p))
+            T, A = analisar(digito)
+            print("{}-{}".format(n_train, p))
+            for d, i in enumerate(A):
+                print("{0}: {1:.2f}%".format(d, i/100))
+            print("Total: {}%\n".format(np.sum(T)/10))
