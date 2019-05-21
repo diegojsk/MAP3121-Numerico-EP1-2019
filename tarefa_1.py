@@ -17,18 +17,17 @@ A = np.zeros((n, m))
 for i in range(n):
     for j in range(m):
         if i == j:
-                A[i][j] = 2
+            A[i][j] = 2
         elif abs(i-j) == 1:
-                A[i][j] = 1
+            A[i][j] = 1
         elif abs(i-j) > 1:
-                A[i][j] = 0
+            A[i][j] = 0
         else:
-                A[i][j] = 0
+            A[i][j] = 0
 
 b = np.ones((n, 1))
-#print(b)
 
-# print(resolver_sist(A,b))
+print(resolver_sist(A,b))
 
 """
 item b)
@@ -51,4 +50,4 @@ b = np.zeros((n,1))
 for i in range(n):
     b[i] = i + 1
 
-print(resolver_sist(B,b))
+print(resolver_sist(B, b))

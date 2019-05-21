@@ -394,9 +394,9 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
 def classificar(n_test=1000, n_train=100, p=5):
     '''
     Classificar as imagens
-            :param :
+        :param :
 
-            :return d: retornar os digitos calculados para cada imagem
+        :return d: retornar os digitos calculados para cada imagem
     '''
 
     folder = "./estimador/"

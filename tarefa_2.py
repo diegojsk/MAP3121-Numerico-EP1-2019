@@ -18,7 +18,7 @@ A = np.array([[3/10, 3/5, 0],
 _A = A.copy()
 
 W = np.array([[3/5, 0],
-              [0, 1/2],
+              [0, 1],
               [4/5, 0]])
 
 H = np.array([[1/2, 1, 0],
@@ -26,11 +26,10 @@ H = np.array([[1/2, 1, 0],
 
 np.set_printoptions(precision=3, suppress=True)
 
-P, Q = resolve_mmq(_A, W)
+P = resolver_sist(_A, W)
 
 print(P)
 print()
-print(Q)
 
 '''
 item c)
@@ -54,7 +53,7 @@ m = 3
 A = np.zeros((n, m))
 for i in range(n):
     for j in range(m):
-        if j == 1-1 :
+        if j == 1-1:
             A[i][j] = 1
         elif j == 2-1:
             A[i][j] = i + 1
@@ -63,7 +62,6 @@ for i in range(n):
 
 H = resolver_sist(W, A)
 print(H)
-
 
 """
 item d)
