@@ -239,8 +239,8 @@ def residuo(A, W, H):
 
 def normalizar(M):
     """
-    normalizar a matriz M, de modo que a norma de todas as suas colunas
-    é igual a zero
+    Normaliza a matriz M, de modo que a norma de todas as suas colunas
+    é igual a um
 
         :param M: ndarray
 
