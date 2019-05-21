@@ -170,47 +170,44 @@ def resolver_sist(W, A):
         :param W: ndarray n;p
         :param A: ndarray n;m
     """
-    n1, p = W.shape
-    n2, m = A.shape
+    n1, m = W.shape
+    n2, p = A.shape
     n = n1
 
     if n1 != n2:
         raise ValueError("Matrizes de tamanhos incompatíveis!")
-    else:
-        n = n1
+    # else:
+    #     n = n1
 
-    H = np.ones((p, m))
+    H = np.ones((m, p))
     k = 1
-    while k <= p:
+    while k <= m:
         # print("K: {}".format(k-1))
-        print("Columns: {0:02}/{1:02}".format(k, p), end = '\r')
+        print("Columns: {0:02}/{1:02}".format(k, m), end='\r')
         j = n
         while j >= k+1:
             # print("=> J: {}".format(j-1))
             print("Columns: {2:02}/{3:02} Lines: {0:03}/{1:03}"
-                  .format(n - j + 1, n - k + 1, k, p), end='\r')
+                  .format(n - j + 1, n - k + 1, k, m), end='\r')
             i = j-1
             if W[j-1][k-1] != 0:
-                # n, m = W.shape
+                # n, m = W.shame
                 _s = calc_s(W[i-1][k-1], W[j-1][k-1])
                 _c = calc_c(W[i-1][k-1], W[j-1][k-1])
-                rot_givens(W, n, p, i-1, j-1, _c, _s)
+                rot_givens(W, n, m, i-1, j-1, _c, _s)
                 rot_givens(A, n, m, i-1, j-1, _c, _s)
             j -= 1
         k += 1
     print()
-    k = p
 
+    k = m
     while k >= 1:
-        j = 1
+        soma = np.zeros(p)
+        j = k + 1
         while j <= m:
-            soma = 0.0
-            i = k + 1
-            while i <= p:
-                soma += W[k-1][i-1]*H[i-1][j-1]
-                i += 1
-            H[k-1][j-1] = (A[k-1][j-1] - soma)/W[k-1][k-1]
+            soma += W[k-1][j-1]*H[j-1, :]
             j += 1
+        H[k-1, :] = (A[k-1, :] - soma)/W[k-1][k-1]
         k -= 1
 
     return H
