@@ -8,8 +8,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train Wd matrix")
 
     parser.add_argument('digit', type=int, help='Digit to be trained')
-    parser.add_argument('p', type=int, help='Digit to be trained')
     parser.add_argument('n_dig', type=int, help='Digit to be trained')
+    parser.add_argument('p', type=int, help='Digit to be trained')
     parser.add_argument('-s', '--sequence', type=int, default=1,
                         help='How many digits to train')
 
