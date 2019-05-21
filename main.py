@@ -259,7 +259,7 @@ def normalizar(M):
     #         M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
 
 
-def resolve_mmq(A, W0):
+def fatorar_wh(A, p):
 
     """
     Encontra uma fatoração para a matriz A na forma A = W*H de modo que
@@ -274,29 +274,22 @@ def resolve_mmq(A, W0):
         :return H: matriz H da fatoração não negativa de A
     """
 
-    n1, p = W0.shape
-    n2, m = A.shape
-
-    n = None
-    if n1 != n2:
-        raise ValueError("Matrizes com tamanhos não compatíveis!")
-    else:
-        n = n1
+    n, m = A.shape
 
     H = np.ones((p, m))
     _H = np.ones((p, m))
-    W = W0.copy()
+    # W = W0.copy()
     _A = A.copy()
-    # W = np.random.rand(n, p)
+    W = np.random.rand(n, p)
     # W = np.ones((n, p))
 
     print("Starting MMQ algorithm")
 
     i = 0
-    err = residuo(_A, W0, H)
+    err = residuo(_A, W, H)
     prev_err = 0.0
 
-    while (np.abs(err - prev_err) > ERR) and (i < MAX_ITER):
+    while (np.abs(err - prev_err)/ERR > err) and (i < MAX_ITER):
         begin = time.time()
         i += 1
         normalizar(W)
@@ -312,9 +305,9 @@ def resolve_mmq(A, W0):
         H_t = H.transpose()
 
         print("- Solving for W_t")
-        W_t = resolver_sist(H_t, A_t)
+        W = resolver_sist(H_t, A_t).transpose()
 
-        W = W_t.transpose()
+        W = W_t.transpose().copy()
 
         W[W < 0.0] = 0.0
 
@@ -324,8 +317,8 @@ def resolve_mmq(A, W0):
         prev_err = err
         err = residuo(A, W, H)
         end = time.time()
-        print("=> Iteration {0} Abs Error {1:.3f} Delta {2:.3f} Time {3:.3f}"
-              .format(i, err, prev_err-err, end - begin))
+        print("=> Iteration {0} Abs Error {1:.3f} Delta {2:.5f} Time {3:.3f}"
+              .format(i, err, (prev_err-err)/err, end - begin))
 
     return (W, H)
 
