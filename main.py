@@ -370,12 +370,12 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
     '''
 
     print("[LOG] Testing digit {0}".format(d))
-    A = matriz_arquivo(PATH + "./dados_mnist/test_images.txt", n_test)
+    A = matriz_arquivo("./dados_mnist/test_images.txt", n_test)
     n, n_test_ = A.shape
     if n_test != n_test_:
         raise ValueError("A leitura de A não foi correta ")
 
-    Wd = np.load(PATH + "./{0}-{1}/W{2}.npy".format(n_train, p, d))
+    Wd = np.load("./{0}-{1}/W{2}.npy".format(n_train, p, d))
 
     H = resolver_sist(Wd.copy(), A.copy())
 
@@ -420,7 +420,8 @@ def classificar(n_test=1000, n_train=100, p=5):
 
     digito[:] = np.argmin(erros, axis=1)
     np.save(folder + "{0}-{1}.npy".format(n_train, p), digito)
-    analisar(digito)
+    # analisar(digito)
+    return digito
 
 
 def analisar(estimativa, n_test=1000):
@@ -456,20 +457,3 @@ def analisar(estimativa, n_test=1000):
     permil = (acertos*1000/total)
 
     return acertos, permil
-
-
-if __name__ == "__main__":
-
-    np.set_printoptions(precision=3, suppress=True)
-
-    train = [4000]
-    ps = [10]
-
-    for n_train in train:
-        for p in ps:
-            digito = np.load("./estimador/{}-{}.npy".format(n_train, p))
-            T, A = analisar(digito)
-            print("{}-{}".format(n_train, p))
-            for d, i in enumerate(A):
-                print("{0}: {1:.2f}%".format(d, i/100))
-            print("Total: {}%\n".format(np.sum(T)/10))
