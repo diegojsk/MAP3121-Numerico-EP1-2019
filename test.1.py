@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 import time
 
-train = [1000, 4000]
+train = [100, 1000, 4000]
 ps = [5, 10, 15]
 
 
