@@ -24,15 +24,6 @@ def calc_c(a, b):
 
         :return: Cosseno do ângulo de rotação
     """
-    # if a.dtype not in SUPPORTED_FORMATS:
-    #     raise TypeError("Matriz de formato não suportado: {}! \
-    #         \nNote que tipos inteiros levam a perdas severas \
-    #         por arredondamento.".format(a.dtype))
-
-    # if b.dtype not in SUPPORTED_FORMATS:
-    #     raise TypeError("Matriz de formato não suportado: {}! \
-    #         \nNote que tipos inteiros levam a perdas severas \
-    #         por arredondamento.".format(b.dtype))
 
     if abs(a) > abs(b):
         T = -np.divide(b, a)
@@ -52,15 +43,6 @@ def calc_s(a, b):
 
         :return: Seno do ângulo de rotação
     """
-    # if a.dtype not in SUPPORTED_FORMATS:
-    #     raise TypeError("Matriz de formato não suportado: {}! \
-    #         \nNote que tipos inteiros levam a perdas severas \
-    #         por arredondamento.".format(a.dtype))
-
-    # if b.dtype not in SUPPORTED_FORMATS:
-    #     raise TypeError("Matriz de formato não suportado: {}! \
-    #         \nNote que tipos inteiros levam a perdas severas \
-    #         por arredondamento.".format(b.dtype))
 
     if abs(a) > abs(b):
         T = -np.divide(b, a)
@@ -85,10 +67,6 @@ def rot_givens(W, n, m, i, j, c, s):
 
         :return: None
     """
-    # if W.dtype not in SUPPORTED_FORMATS:
-    #     raise TypeError("Matriz de formato não suportado: {}! \
-    #         \nNote que tipos inteiros levam a perdas severas \
-    #         por arredondamento.".format(W.dtype))
 
     '''
     Implementação mais eficiente da Rotação de Givens
@@ -313,7 +291,7 @@ def fatorar_wh(A, p):
 
 def matriz_arquivo(arquivo, n_train=-1):
     """
-    Lê arquivo.txt e transforma em array Matriz normalizarda
+    Lê [arquivo] e transforma em array Matriz normalizarda
 
         :param arquivo: string Nome do arquivo
 
@@ -332,7 +310,7 @@ def matriz_arquivo(arquivo, n_train=-1):
 
 def treinar(d, p=10, n_train=100):
     '''
-    Executar treinamento do dígito d gerando a matriz Wd
+    Executar treinamento do dígito d, gerando a matriz Wd
 
         :param d: int Dígito d
         :param p: int Quantidade de linhas da matriz W
@@ -359,7 +337,7 @@ def treinar(d, p=10, n_train=100):
 
 def fatorar_digito(d, n_test=1000, n_train=100, p=5):
     '''
-    Calcular H a partir de Wd e retornar o erro de A-Wd*H
+    Calcular H a partir de Wd e retorna o erro de A-Wd*H
 
         :param Wd: ndarray Matriz Wd para certo d
         :param n_test: int Quantidade de amostras utilizadas no teste
