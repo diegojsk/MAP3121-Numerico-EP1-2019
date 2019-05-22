@@ -16,7 +16,8 @@ SUPPORTED_FORMATS = [np.float32, np.float64, np.float_,
 
 def calc_c(a, b):
     """
-    Calcula o parâmetro c, definido na página 3 do enunciado
+    Calcula o parâmetro c, correspondente ao cosseno do ângulo da rotação
+    de Givens
 
         :param a: w[i,k] - elemento da matriz W na posição (i, k)
         :param b: w[j,k] - elemento da matriz W na posição (j, k)
@@ -43,7 +44,8 @@ def calc_c(a, b):
 
 def calc_s(a, b):
     """
-    Calcula o parâmetro s, definido na página 3 do enunciado
+    Calcula o parâmetro s, correspondente ao seno do ângulo da rotação
+    de Givens
 
         :param a: double w[i,k] - elemento da matriz W na posição (i, k)
         :param b: double w[j,k] - elemento da matriz W na posição (j, k)
@@ -71,6 +73,7 @@ def calc_s(a, b):
 def rot_givens(W, n, m, i, j, c, s):
     """
     Efetua a rotação de Givens para matriz W
+    ! Atenção, as alterações são feitas in place na matriz W
 
         :param W: ndarray
         :param n: int Número de linhas de W
@@ -138,9 +141,9 @@ def fatorar_qr(W):
     superior.
 
     Ou seja, a função transforma a matriz W em uma matriz triangular
-    superior por meio de sucessivas rotações de Givens
+    superior por meio de sucessivas rotações de Givens.
 
-        :param W: ndarray
+        :param W: ndarray shape(n, m)
 
         :return: None
     """
@@ -165,10 +168,10 @@ def resolver_sist(W, A):
     """
     Dadas matrizes W e A, encontra a matriz H, tal que W*H = A
 
-    Função Principal da Primeira Tarefa a), b), c) e d)
+    Função Principal da Primeira Tarefa
 
-        :param W: ndarray n;p
-        :param A: ndarray n;m
+        :param W: ndarray shape(n, m)
+        :param A: ndarray shape(n, p)
     """
     n1, m = W.shape
     n2, p = A.shape
@@ -176,22 +179,17 @@ def resolver_sist(W, A):
 
     if n1 != n2:
         raise ValueError("Matrizes de tamanhos incompatíveis!")
-    # else:
-    #     n = n1
 
     H = np.ones((m, p))
     k = 1
     while k <= m:
-        # print("K: {}".format(k-1))
         print("Columns: {0:02}/{1:02}".format(k, m), end='\r')
         j = n
         while j >= k+1:
-            # print("=> J: {}".format(j-1))
             print("Columns: {2:02}/{3:02} Lines: {0:03}/{1:03}"
                   .format(n - j + 1, n - k + 1, k, m), end='\r')
             i = j-1
             if W[j-1][k-1] != 0:
-                # n, m = W.shame
                 _s = calc_s(W[i-1][k-1], W[j-1][k-1])
                 _c = calc_c(W[i-1][k-1], W[j-1][k-1])
                 rot_givens(W, n, m, i-1, j-1, _c, _s)
@@ -217,11 +215,11 @@ def residuo(A, W, H):
     """
     Calcula o resíduo quadrático para | A - W*H |
 
-        :param W: ndarray n;m
-        :param A: ndarray n;p
-        :param W: ndarray p;m
+        :param A: ndarray shape(n, p)
+        :param W: ndarray shape(p, m)
+        :param W: ndarray shape(n, m)
 
-        :return erro: erro calculado
+        :return erro: Erro quadrático para a fatoração
     """
     na, ma = A.shape
     nw, pw = W.shape
@@ -240,23 +238,17 @@ def residuo(A, W, H):
 def normalizar(M):
     """
     Normaliza a matriz M, de modo que a norma de todas as suas colunas
-    é igual a um
+    seja igual a um
 
         :param M: ndarray
 
         :return: None
     """
-    # soma_colunas = np.power(M.sum(axis=0), 1)
-    # n, m = M.shape
-    # np.divide(M, soma_colunas, out=M)
 
     n, m = M.shape
     M_n = np.multiply(M, M)
     soma_colunas = np.sum(M_n, axis=0)
     np.divide(M, np.sqrt(soma_colunas), out=M)
-    # for i in range(n):
-    #     for j in range(m):
-    #         M[i][j] = np.divide(M[i][j], np.sqrt(soma_colunas[j]))
 
 
 def fatorar_wh(A, p):
@@ -267,21 +259,19 @@ def fatorar_wh(A, p):
 
     Função Principal da Segunda Tarefa
 
-        :param A: Matriz a ser fatorada
-        :param W0: Matriz W0 para determinação dos fatores
+        :param A: ndarray Matriz a ser fatorada
+        :param p: int Quantidade de colunas de W
 
-        :return W: matriz W da fatoração não negativa de A
-        :return H: matriz H da fatoração não negativa de A
+        :return W: ndarray Matriz W da fatoração não negativa de A
+        :return H: ndarray Matriz H da fatoração não negativa de A
     """
 
     n, m = A.shape
 
     H = np.ones((p, m))
     _H = np.ones((p, m))
-    # W = W0.copy()
     _A = A.copy()
     W = np.random.rand(n, p)
-    # W = np.ones((n, p))
 
     print("Starting MMQ algorithm")
 
@@ -321,12 +311,13 @@ def fatorar_wh(A, p):
     return (W, H)
 
 
-def matriz_arquivo(arquivo, ndig_treino=-1):
+def matriz_arquivo(arquivo, n_train=-1):
     """
     Lê arquivo.txt e transforma em array Matriz normalizarda
-        :param arquivo: Nome do arquivo
 
-        :return: matriz extraída do arquivo normalizarda
+        :param arquivo: string Nome do arquivo
+
+        :return: ndarray Matriz extraída do arquivo normalizarda
     """
 
     matriz = []
@@ -334,22 +325,26 @@ def matriz_arquivo(arquivo, ndig_treino=-1):
     with open(arquivo, "r+") as arq:
         for raw_linha in arq:
             raw_linha = raw_linha.strip('\n').split(' ')
-            linha = [float(num) for num in raw_linha[:ndig_treino]]
+            linha = [float(num) for num in raw_linha[:n_train]]
             matriz.append(linha)
     return np.array(matriz)/255.0
 
 
-def treinar(d, p=10, ndig_treino=100):
+def treinar(d, p=10, n_train=100):
     '''
     Executar treinamento do dígito d gerando a matriz Wd
-          :param d: dígito d
-          :param p: parâmetro p de Wd nxp
-          :param ndig_treino:
+
+        :param d: int Dígito d
+        :param p: int Quantidade de linhas da matriz W
+        :param n_train: int Quantidade de amostras a serem utilizadas
+        no treinamento
+
+        :return None:
     '''
 
-    folder = "./{0}-{1}/".format(ndig_treino, p)
+    folder = "./{0}-{1}/".format(n_train, p)
 
-    A = matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt', ndig_treino)
+    A = matriz_arquivo('dados_mnist/train_dig'+str(d)+'.txt', n_train)
     print("Matrix loaded!")
     n, m = A.shape
     Wd, H = fatorar_wh(A, p)
@@ -365,9 +360,13 @@ def treinar(d, p=10, ndig_treino=100):
 def fatorar_digito(d, n_test=1000, n_train=100, p=5):
     '''
     Calcular H a partir de Wd e retornar o erro de A-Wd*H
-       :param Wd: matriz Wd para certo d
 
-       :return c: erro associado a A-Wd*H
+        :param Wd: ndarray Matriz Wd para certo d
+        :param n_test: int Quantidade de amostras utilizadas no teste
+        :param n_train: int Quantidade de amostras utilizadas no treinamento
+        :param p: int Quantidade de linhas da matriz W
+
+        :return c: double Módulo da matriz A-Wd*H
     '''
 
     print("[LOG] Testing digit {0}".format(d))
@@ -393,10 +392,13 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
 
 def classificar(n_test=1000, n_train=100, p=5):
     '''
-    Classificar as imagens
-        :param :
+    Classificar as imagens do dataset de teste
 
-        :return d: retornar os digitos calculados para cada imagem
+        :param n_test: int Quantidade de amostras utilizadas no teste
+        :param n_train: int Quantidade de amostras utilizadas no treinamento
+        :param p: int Quantidade de linhas da matriz W
+
+        :return d: ndarray (n_test,) Digito calculado para cada imagem
     '''
 
     folder = "./estimador/"
@@ -421,24 +423,24 @@ def classificar(n_test=1000, n_train=100, p=5):
     analisar(digito)
 
 
-def analisar(estimativa):
+def analisar(estimativa, n_test=1000):
     '''
     Analisar o percentual de acertos
-        :param estimativa: None
 
-        :return : None
+        :param estimativa: ndarray Lista de classificações do conjunto de teste
+        :param n_test: int Quantidade de amostras utilizadas no teste
+
+        :return acertos: list Lista de acertos para cada digito
+        :return permil: list Fração de acertos relativa a cada mil amostras
     '''
 
     '''
     Leitura dos índices corretos a partir de test_index.txt
     '''
-    n_test = 1000
+
     index = np.zeros(n_test).astype(np.int)
     with open("./dados_mnist/test_index.txt", "r+") as arq:
         for i, raw_linha in enumerate(arq):
-            # raw_linha = raw_linha.strip('\n').split(' ')
-            # linha = [int(num) for num in raw_linha[:ndig_treino]]
-            # index[i] = linha
             if i < n_test:
                 index[i] = int(raw_linha.strip('\n'))
             else:
@@ -451,10 +453,9 @@ def analisar(estimativa):
         if int(gaba) == int(resp):
             acertos[int(gaba)] += 1
 
-    porcentagem = (acertos*10000/total)
+    permil = (acertos*1000/total)
 
-    return acertos, porcentagem
-    # return porcentagem_total
+    return acertos, permil
 
 
 if __name__ == "__main__":
