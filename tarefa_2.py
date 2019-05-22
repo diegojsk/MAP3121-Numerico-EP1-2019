@@ -24,12 +24,9 @@ W = np.array([[3/5, 0],
 H = np.array([[1/2, 1, 0],
               [1/2, 0, 1]])
 
-np.set_printoptions(precision=3, suppress=True)
-
 P = resolver_sist(_A, W)
 
 print(P)
-print()
 
 '''
 item c)
@@ -70,7 +67,7 @@ item d)
 n = 20
 p = 17
 W = np.zeros((n, p))
-##print(W)
+
 for i in range(n):
     for j in range(p):
         if abs(i-j) <= 4:

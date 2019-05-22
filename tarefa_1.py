@@ -27,7 +27,7 @@ for i in range(n):
 
 b = np.ones((n, 1))
 
-print(resolver_sist(A,b))
+print(resolver_sist(A, b))
 
 """
 item b)
@@ -46,7 +46,7 @@ for i in range(n):
         else:
             B[i][j] = 0
 
-b = np.zeros((n,1))
+b = np.zeros((n, 1))
 for i in range(n):
     b[i] = i + 1
 
