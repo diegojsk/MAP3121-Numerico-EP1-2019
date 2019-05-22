@@ -73,8 +73,7 @@ parâmetros *n_train* e *p* especificados na chamada do script
  - def fatorar_qr(W)
    - Encontra a matriz R de modo que Q*R = W, onde Q é o resultado de
     sucessivas matrizes de rotação de Givens e R é uma matriz triangular
-    superior.
-
+    superior.  
     Ou seja, a função transforma a matriz W em uma matriz triangular
     superior por meio de sucessivas rotações de Givens.
 
@@ -83,8 +82,8 @@ parâmetros *n_train* e *p* especificados na chamada do script
         - :return: None
 
  - def resolver_sist(W, A)
-   - Dadas matrizes W e A, encontra a matriz H, tal que W*H = A
 
+   - Dadas matrizes W e A, encontra a matriz H, tal que W*H = A  
     Função Principal da Primeira Tarefa
 
         - :param W: ndarray shape(n, m)
@@ -112,8 +111,7 @@ parâmetros *n_train* e *p* especificados na chamada do script
  - def fatorar_wh(A, p)
 
    - Encontra uma fatoração para a matriz A na forma A = W*H de modo que
-    W e H são matrizes não-negativas
-
+    W e H são matrizes não-negativas  
     Função Principal da Segunda Tarefa
 
         - :param A: ndarray Matriz a ser fatorada
