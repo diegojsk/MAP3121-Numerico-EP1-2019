@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     np.set_printoptions(precision=3, suppress=True)
 
-    output = open('resultados.csv', 'w')
+    output = open('resultados_num.csv', 'w')
 
     for n_train in train:
         for p in ps:
@@ -21,9 +21,10 @@ if __name__ == "__main__":
             print("{}-{}".format(n_train, p), end=', ')
             output.write("{}-{}, ".format(n_train, p))
             for d, i in enumerate(A):
-                print("{1:.2f}%".format(d, i/10), end=', ')
-                output.write("{1:.2f}%, ".format(d, i/10))
-            print("{}%\n".format(np.sum(T)/10))
-            output.write("{}%\n".format(np.sum(T)/10))
+                print("{0:.3f}".format(i/1000), end=', ')
+                output.write("{0:.3f}, ".format(i/1000))
+            print("{}\n".format(np.sum(T)/1000))
+            output.write("{}\n".format(np.sum(T)/1000))
+            output.flush()
 
     output.close()

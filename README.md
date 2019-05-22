@@ -18,12 +18,15 @@ As pastas são nomeadas na forma ./[n_train]-[p]/
    - **digit** - Dígito para começar o treinamento
    - **n_train** - Quantidade de imagens a serem uitlizadas no treinamento
    - **p** - Quantidade de linhas da matriz Wd
+   - i.e. ```python3 train.py 0 4000 15```
  - __test.py__ - Classifica *n_test* imagens do conjunto de teste e afere o desempenho do modelo  
 O script acessa as matrizes salvas nas pastas na raiz do projeto, de acordo com os 
 parâmetros *n_train* e *p* especificados na chamada do script
    - Uso ```python3 test.py n_train p```
    - **n_train** - Quantidade de imagens uitlizadas no treinamento
    - **p** - Quantidade de linhas da matriz Wd
+   - i.e. ```python3 test.py 4000 15```
+ - __utils.py__ - Script para visualização das imagens na forma de vetor coluna
 
 
 ## Estrutura da main.py
