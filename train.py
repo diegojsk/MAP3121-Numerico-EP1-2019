@@ -5,6 +5,8 @@ import time
 
 if __name__ == "__main__":
 
+    np.set_printoptions(precision=3, suppress=True)
+
     parser = argparse.ArgumentParser(description="Train Wd matrix")
 
     parser.add_argument('digit', type=int, help='Digit to start training')
