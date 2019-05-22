@@ -63,12 +63,12 @@ parâmetros *n_train* e *p* especificados na chamada do script
  - def zerar_elemento(W, i, j, k)    
    - Realiza uma rotação de Givens de modo a zerar o elemento (j,k)
 
-        :param W: ndarray
-        :param i: linha a ser rotacionada
-        :param j: linha a ser zerada
-        :param k: coluna a ser zerada
+        - :param W: ndarray
+        - :param i: linha a ser rotacionada
+        - :param j: linha a ser zerada
+        - :param k: coluna a ser zerada
 
-        :return: None
+        - :return: None
 
  - def fatorar_qr(W)
    - Encontra a matriz R de modo que Q*R = W, onde Q é o resultado de
@@ -78,36 +78,36 @@ parâmetros *n_train* e *p* especificados na chamada do script
     Ou seja, a função transforma a matriz W em uma matriz triangular
     superior por meio de sucessivas rotações de Givens.
 
-        :param W: ndarray shape(n, m)
+        - :param W: ndarray shape(n, m)
 
-        :return: None
+        - :return: None
 
  - def resolver_sist(W, A)
    - Dadas matrizes W e A, encontra a matriz H, tal que W*H = A
 
     Função Principal da Primeira Tarefa
 
-        :param W: ndarray shape(n, m)
-        :param A: ndarray shape(n, p)
+        - :param W: ndarray shape(n, m)
+        - :param A: ndarray shape(n, p)
 
  - def residuo(A, W, H)
 
    - Calcula o resíduo quadrático para | A - W*H |
 
-        :param A: ndarray shape(n, p)
-        :param W: ndarray shape(p, m)
-        :param W: ndarray shape(n, m)
+        - :param A: ndarray shape(n, p)
+        - :param W: ndarray shape(p, m)
+        - :param W: ndarray shape(n, m)
 
-        :return erro: Erro quadrático para a fatoração
+        - :return erro: Erro quadrático para a fatoração
 
  - def normalizar(M)
 
    - Normaliza a matriz M, de modo que a norma de todas as suas colunas
     seja igual a um
 
-        :param M: ndarray
+        - :param M: ndarray
 
-        :return: None
+        - :return: None
 
  - def fatorar_wh(A, p)
 
@@ -116,59 +116,59 @@ parâmetros *n_train* e *p* especificados na chamada do script
 
     Função Principal da Segunda Tarefa
 
-        :param A: ndarray Matriz a ser fatorada
-        :param p: int Quantidade de colunas de W
+        - :param A: ndarray Matriz a ser fatorada
+        - :param p: int Quantidade de colunas de W
 
-        :return W: ndarray Matriz W da fatoração não negativa de A
-        :return H: ndarray Matriz H da fatoração não negativa de A
+        - :return W: ndarray Matriz W da fatoração não negativa de A
+        - :return H: ndarray Matriz H da fatoração não negativa de A
 
  - def matriz_arquivo(arquivo, n_train=-1)
 
    - Lê [arquivo] e transforma em array Matriz normalizarda
 
-        :param arquivo: string Nome do arquivo
+        - :param arquivo: string Nome do arquivo
 
-        :return: ndarray Matriz extraída do arquivo normalizarda
+        - :return: ndarray Matriz extraída do arquivo normalizarda
 
  - def treinar(d, p=10, n_train=100)
 
    - Executar treinamento do dígito d, gerando a matriz Wd
 
-        :param d: int Dígito d
-        :param p: int Quantidade de linhas da matriz W
-        :param n_train: int Quantidade de amostras a serem utilizadas
+        - :param d: int Dígito d
+        - :param p: int Quantidade de linhas da matriz W
+        - :param n_train: int Quantidade de amostras a serem utilizadas
         no treinamento
 
-        :return None:
+        - :return None:
 
  - def fatorar_digito(d, n_test=1000, n_train=100, p=5)
 
    - Calcular H a partir de Wd e retorna o erro de A-Wd*H
 
-        :param Wd: ndarray Matriz Wd para certo d
-        :param n_test: int Quantidade de amostras utilizadas no teste
-        :param n_train: int Quantidade de amostras utilizadas no treinamento
-        :param p: int Quantidade de linhas da matriz W
+        - :param Wd: ndarray Matriz Wd para certo d
+        - :param n_test: int Quantidade de amostras utilizadas no teste
+        - :param n_train: int Quantidade de amostras utilizadas no treinamento
+        - :param p: int Quantidade de linhas da matriz W
 
-        :return c: double Módulo da matriz A-Wd*H
+        - :return c: double Módulo da matriz A-Wd*H
 
  - def classificar(n_test=1000, n_train=100, p=5)
 
    - Classificar as imagens do dataset de teste
 
-        :param n_test: int Quantidade de amostras utilizadas no teste
-        :param n_train: int Quantidade de amostras utilizadas no treinamento
-        :param p: int Quantidade de linhas da matriz W
+        - :param n_test: int Quantidade de amostras utilizadas no teste
+        - :param n_train: int Quantidade de amostras utilizadas no treinamento
+        - :param p: int Quantidade de linhas da matriz W
 
-        :return d: ndarray (n_test,) Digito calculado para cada imagem
+        - :return d: ndarray (n_test,) Digito calculado para cada imagem
 
  - def analisar(estimativa, n_test=1000)
 
    - Analisar o percentual de acertos
 
-        :param estimativa: ndarray Lista de classificações do conjunto de teste
-        :param n_test: int Quantidade de amostras utilizadas no teste
+        - :param estimativa: ndarray Lista de classificações do conjunto de teste
+        - :param n_test: int Quantidade de amostras utilizadas no teste
 
-        :return acertos: list Lista de acertos para cada digito
-        :return permil: list Fração de acertos relativa a cada mil amostras
+        - :return acertos: list Lista de acertos para cada digito
+        - :return permil: list Fração de acertos relativa a cada mil amostras
 
