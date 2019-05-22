@@ -19,7 +19,7 @@ if __name__ == "__main__":
     begin = time.time()
     for d in range(args.digit, 10):
         partial = time.time()
-        print("[LOG] Loading file ({}/10)".format(d+1s))
+        print("[LOG] Loading file ({}/10)".format(d+1))
         treinar(d, p=args.p, n_train=args.n_train)
         end = time.time()
         print("[LOG] Finished file {0} in {1} s".format(d+1, end - partial))
