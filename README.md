@@ -28,6 +28,13 @@ parâmetros *n_train* e *p* especificados na chamada do script
    - i.e. ```python3 test.py 4000 15```
  - __utils.py__ - Script para visualização das imagens na forma de vetor coluna
 
+## Estrutura das pastas
+
+ - ./dados_mnist - Conjunto de dados fornecido para treino e teste
+ - ./[N_TRAIN]-[P] - Local das matrizes Wd obtidas por meio do treinamento com N_TRAIN casos
+de teste e P linhas na matriz Wd. As matrizes se encontram na forma de arquivos .npy
+ - ./estimador - Conjuto de classificações estimadas para o conjunto de dados de teste
+ - ./output - Matrizes geradas por meio da multiplicação Wd*H
 
 ## Estrutura da main.py
 
