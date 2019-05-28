@@ -6,9 +6,14 @@
 Exercício Programa 1 para a disciplina MAP 3121 - Métodos Numéricos e Aplicações
 Poli - USP - 2019
 
+Engenharia Mecatrônica
+
+Diego Jun Sato Kurashima - 10274231
+Felipe Gomes de Melo D'Elia - 10340624
+
 [Link](https://www.ime.usp.br/~map3121/2019/map3121/programas/EP1-MachineLearning_v2.pdf) do enunciado
 
-[Link](https://docs.google.com/document/d/1__LbmVL0IIN13Hf8ZoNnkv6He_3kZvP12aE3JNr4U-k/edit) do relatório EP1
+[Link](./EP1-Relatório.pdf) do relatório EP1
 
 ## Estrutura dos arquivos
 
@@ -32,6 +37,13 @@ parâmetros *n_train* e *p* especificados na chamada do script
    - i.e. ```python3 test.py 4000 15```
  - __utils.py__ - Script para visualização das imagens na forma de vetor coluna
 
+## Estrutura das pastas
+
+ - ./dados_mnist - Conjunto de dados fornecido para treino e teste
+ - ./[N_TRAIN]-[P] - Local das matrizes Wd obtidas por meio do treinamento com N_TRAIN casos
+de teste e P linhas na matriz Wd. As matrizes se encontram na forma de arquivos .npy
+ - ./estimador - Conjuto de classificações estimadas para o conjunto de dados de teste
+ - ./output - Matrizes geradas por meio da multiplicação Wd*H
 
 ## Estrutura da main.py
 
