@@ -347,6 +347,11 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
         :return c: double Módulo da matriz A-Wd*H
     '''
 
+    folder = './output/'
+
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
     print("[LOG] Testing digit {0}".format(d))
     A = matriz_arquivo("./dados_mnist/test_images.txt", n_test)
     n, n_test_ = A.shape
@@ -356,6 +361,9 @@ def fatorar_digito(d, n_test=1000, n_train=100, p=5):
     Wd = np.load("./{0}-{1}/W{2}.npy".format(n_train, p, d))
 
     H = resolver_sist(Wd.copy(), A.copy())
+
+    np.save(folder+"matmul-{}-{}-{}.npy".format(d, n_train, p),
+            np.matmul(Wd, H))
 
     p, k = H.shape
     if k != n_test:
