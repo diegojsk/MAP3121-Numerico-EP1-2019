@@ -4,7 +4,7 @@
 
 Engenharia Mecatrônica
 
-Diego Jun Sato Kurashima - 10274231
+Diego Jun Sato Kurashima - 10274231  
 Felipe Gomes de Melo D'Elia - 10340624
 
 [Link](https://www.ime.usp.br/~map3121/2019/map3121/programas/EP1-MachineLearning_v2.pdf) do enunciado
