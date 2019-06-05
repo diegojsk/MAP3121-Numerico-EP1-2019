@@ -18,7 +18,11 @@ COLS = 4
 
 # A = load_data(7, model_path='./output/matmul-4-4000-10.npy', cols=LINS*COLS)
 
+<<<<<<< HEAD
+A = np.load('./output/matmul-4-4000-10.npy')[:,:LINS*COLS]
+=======
 A = np.load('./output/matmul-1-4000-10.npy')[:, :LINS*COLS]
+>>>>>>> 338cc2a48db2618581804354540d12c958d35a9e
 A = A.reshape((28, 28, LINS*COLS))
 
 fig = plt.figure()
