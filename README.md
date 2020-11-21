@@ -8,8 +8,8 @@ Poli - USP - 2019
 
 Engenharia Mecatrônica
 
-Diego Jun Sato Kurashima - 10274231  
-Felipe Gomes de Melo D'Elia - 10340624
+Diego Jun Sato Kurashima  
+Felipe Gomes de Melo D'Elia  
 
 [Link](./EP1-Enunciado.pdf) do enunciado
 
