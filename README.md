@@ -1,12 +1,11 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-with-science.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
 
-
 # Numerico-EP1-2019
 
 Exercício Programa 1 para a disciplina MAP 3121 - Métodos Numéricos e Aplicações
 Poli - USP - 2019
 
-Engenharia Mecatrônica
+Engenharia Mecatrônica - PMR
 
 Diego Jun Sato Kurashima  
 Felipe Gomes de Melo D'Elia  
