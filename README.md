@@ -8,7 +8,7 @@ Poli - USP - 2019
 Engenharia Mecatrônica - PMR
 
 Diego Jun Sato Kurashima  
-Felipe Gomes de Melo D'Elia  
+Felipe Gomes de Melo
 
 [Link](./EP1-Enunciado.pdf) do enunciado
 
